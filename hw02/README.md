@@ -1,1 +1,1 @@
-# Here is the folder containing all my hw materials
+# This folder contains all my HW02 materials
