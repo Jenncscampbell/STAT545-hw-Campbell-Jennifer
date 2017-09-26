@@ -1,0 +1,19 @@
+---
+title: "Gapminder Exploration"
+author: "JC"
+date: '2017-09-25'
+output: github_document
+---
+
+```{r, echo=FALSE, warning=FALSE}
+library(gapminder)
+library(tidyverse)
+```
+
+### What is GapMinder?
+
+```{r, echo=FALSE, warning=FALSE}
+str(gapminder)
+```
+
+#### We can see from the structure command that GapMinder is a data.frame
