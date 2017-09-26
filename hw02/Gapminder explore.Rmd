@@ -5,54 +5,56 @@ date: '2017-09-25'
 output: github_document
 ---
 
-```{r, echo=FALSE, warning=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 library(gapminder)
 library(tidyverse)
+library(knitr)
 ```
 
-### What is GapMinder?
+## Smell test the data
 
-```{r, echo=FALSE, warning=FALSE}
+We can see from the `structure` command that GapMinder is a data.frame
+
+```{r, echo=FALSE}
 str(gapminder)
 ```
 
-#### We can see from the structure command that GapMinder is a data.frame
+
+
+We see that Gapminder is a tibble data frame.
 
 ```{r}
 class(gapminder)
 ```
 
-##### We see that Gapminder is a tibble data frame.
-
-#### How many columns and rows?
-```{r}
+GapMinder has 6 columns (variables) and 1704 rows of data. 
+```{r, echo=FALSE}
 ncol(gapminder)
 nrow(gapminder)
 ```
 
-##### GapMinder has 6 columns (variables) and 1704 rows of data. 
 
-##### Another way to get this information about extent and size is to use the dim() function. This will give the dimensions in a single line of code which may save you time. 
-```{r}
+
+Another way to get this information about extent and size is to use the `dim` function. This will give the dimensions in a single line of code which may save you time. 
+```{r, echo=FALSE}
 dim(gapminder)
 ```
 
-##### If you just want the number of variables, you could also use the structure funciton (demonstrated above). The first line of output tells you the number of observations and variables. The length funciton which will give the number of variables Also if you just type in "gampminder" you will get a data preview which will give you all the variables and their names and tell you the number of rows. 
+If you just want the number of variables, you could also use the `str` funciton (demonstrated above). The first line of output tells you the number of observations and variables. The `length` funciton (below) will give the number of variables 
 
-```{r}
+```{r, echo=FALSE}
 length(gapminder)
 ```
-```{r}
+
+Also if you just type in "gampminder" you will get a data preview which will give you all the variables and their names and tell you the number of rows and tell you the type of each variable. 
+
+
+```{r, echo=FALSE}
 gapminder
 ```
 
-#### What type is each variable?
 
-```{r}
-gapminder
-```
-
-##### At the top of each row we can view the data type of each variable: 
+ At the top of each row we can view the data type of each variable: 
 |   **Variable**  | **Data Type** |
 |-----------------|------------|
 | Country         | Factor     |
@@ -61,3 +63,55 @@ gapminder
 | LifeExp         | Double     |
 | Pop             | Integer    |
 | GdpPercap       | Double     |
+
+
+## Explore individual variables
+
+Here I will explore the variables Continent, year and life expectancy
+```{r, echo=FALSE}
+
+kable( gapminder %>% 
+  select(continent, year, lifeExp)  %>%
+ summary())
+```
+
+From this output we can see that Continent has 6 possible values with Africa having the most data points and Oceania having the least. The Year variable tells us that the data was collected between 1952 and 2007 with the mean year being 1980, the distribution of years is relatively uniform. The mean life expectancy across regions and years was 59.47 with a range between 23.60 and 82.60. 
+
+To better see the distribution of Life Expectancy, I created a histogram
+```{r, echo=FALSE}
+hist(gapminder$lifeExp)
+```
+
+This distribution shows a negative skew. 
+
+
+To explore the variable country, I asked for a summary. From this summary, we can see that each country has 12 data points with data being collected from 142 countries. 
+
+```{r, echo=FALSE}
+gapminder %>% 
+    group_by(country) %>% 
+    summarize(n_distinct(year))
+```
+
+## Explore various plot types
+
+```{r, echo=FALSE}
+ggplot(gapminder, aes(x=year, y=pop)) +
+    geom_point()
+```
+
+This plot between population and year seems to be quite interesting. This plot seems to reveal that there are two distinct sub populations here. We see that the vast majority of data points have a low population regarless of year but a few data points show a drastic increase in population over just a few years. 
+
+To further explore this, I created a plot of the population over years for China and Canada. Here we can more easily see how population has grown over the years differently across these two countries
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+filter(gapminder, country == "China" | country == "Canada" ) %>%
+ ggplot( aes(x=year, y=pop)) +
+    geom_point(alpha=1, aes(colour= country))
+```
+
+To explore the population 
+
+
+
