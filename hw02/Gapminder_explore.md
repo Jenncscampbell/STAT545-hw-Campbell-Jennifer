@@ -141,13 +141,7 @@ This is a bit hard to read so here is a graph: ![](Gapminder_explore_files/figur
 
 For the lower populations, we see a clear increase in life expectancy over the years toping out at just over 70 for 1990s.
 
-I was curious if higher population places in Asia would see a higher trend, perhaps by being in a larger country that may have more resources. Since I'd like to compare between the same time period, I limited my graph to populations over 500 million and to years prior to 1990.
-
-![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-19-1.png)
-
-This seems to show the same trend but the life expectancy is lower at every data point.
-
-To better directly compare these groups which are under half a million and those over 500 million: A word of advice here is to check with View after each mutate line (like below) so that you can check what it is doing as you go.
+I was curious if higher population places in Asia would achieve a higher life expectancy faster, perhaps by being in a larger country that may have more resources. Since I'd like to compare between the same time period, I limited my graph to populations over 500 million and to years prior to 1990. To better directly compare these groups which are under half a million and those over 500 million I put these side by side.
 
 ``` r
 gapminder  %>% 
@@ -161,21 +155,25 @@ ggplot( aes(x=year, y=lifeExp)) +
     geom_point(colour="dark blue") + geom_smooth(se = FALSE,method='lm', colour="light blue")
 ```
 
-![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-20-1.png)
+![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-19-1.png)
+
+This seems to show the same trend but the life expectancy is lower at every data point.
+
+> A word of advice here is to check with View after each mutate line (like below) so that you can check what it is doing as you go.
 
 Perhaps though a better way to compare is to graph year and life expectancy and vary population plot point sizes:
 
-![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-21-1.png)
+![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-20-1.png)
 
 This makes it a lot easier to see that the lower population countries have higher life expectancy.
 
-However, it this is a huge simplification as it really depends on how you look at the data. For example if we compare 3 continents prior to 1990 and with populations under half a million: ![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-22-1.png)
+However, it this is a huge simplification as it really depends on how you look at the data. For example if we compare 3 continents prior to 1990 and with populations under half a million: ![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-21-1.png)
 
 These graphs show differences in the relationship between population and life expectancy between continents.
 
 Here's another way to show the oversimplificaiton of the above graphs. By focusing on just four countries, you can see that here Japan has the highest population but consistently has higher life expectancy. I also found a theme to make this a bit more organized and professional looking. There is a whole package: ggthemes
 
-![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-23-1.png)
+![](Gapminder_explore_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-22-1.png)
 
 I want to do more
 -----------------
