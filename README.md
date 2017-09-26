@@ -1,2 +1,3 @@
-# STAT545-hw2-Campbell-Jennifer
-HW 2
+# STAT545 Homework -Campbell, Jennifer
+
+Here is the [link to my HW2 folder] (http://stat545.com/syllabus.html)
