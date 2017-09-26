@@ -182,11 +182,7 @@ This seems to show the same trend but the life expectancy is lower at every data
 To better directly compare these groups which are under half a million and those over 500 million:
 A word of advice here is to check with View after each mutate line (like below) so that you can check what it is doing as you go.  
 
-```{r}
-gapminder  %>% 
-  mutate(popsize=NA) %>% 
-  mutate(popsize = ifelse(pop > 500000000, "large", popsize)) %>% View
-```
+
 ```{r}
 gapminder  %>% 
   mutate(popsize=NA) %>% 
