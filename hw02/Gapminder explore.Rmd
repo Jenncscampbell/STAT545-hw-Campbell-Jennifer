@@ -17,3 +17,47 @@ str(gapminder)
 ```
 
 #### We can see from the structure command that GapMinder is a data.frame
+
+```{r}
+class(gapminder)
+```
+
+##### We see that Gapminder is a tibble data frame.
+
+#### How many columns and rows?
+```{r}
+ncol(gapminder)
+nrow(gapminder)
+```
+
+##### GapMinder has 6 columns (variables) and 1704 rows of data. 
+
+##### Another way to get this information about extent and size is to use the dim() function. This will give the dimensions in a single line of code which may save you time. 
+```{r}
+dim(gapminder)
+```
+
+##### If you just want the number of variables, you could also use the structure funciton (demonstrated above). The first line of output tells you the number of observations and variables. The length funciton which will give the number of variables Also if you just type in "gampminder" you will get a data preview which will give you all the variables and their names and tell you the number of rows. 
+
+```{r}
+length(gapminder)
+```
+```{r}
+gapminder
+```
+
+#### What type is each variable?
+
+```{r}
+gapminder
+```
+
+##### At the top of each row we can view the data type of each variable: 
+|   **Variable**  | **Data Type** |
+|-----------------|------------|
+| Country         | Factor     |
+| Continent       | Factor     |
+| Year            | Integer    |
+| LifeExp         | Double     |
+| Pop             | Integer    |
+| GdpPercap       | Double     |
