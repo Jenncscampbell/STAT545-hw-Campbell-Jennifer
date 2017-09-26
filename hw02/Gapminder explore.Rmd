@@ -9,6 +9,7 @@ output: github_document
 library(gapminder)
 library(tidyverse)
 library(knitr)
+library(ggthemes)
 ```
 
 ## Smell test the data
@@ -111,7 +112,116 @@ filter(gapminder, country == "China" | country == "Canada" ) %>%
     geom_point(alpha=1, aes(colour= country))
 ```
 
-To explore the population 
+To explore the GDP per capital for the entire data set:
+```{r, echo=FALSE}
+ggplot(gapminder, aes(x = gdpPercap)) + geom_density()
+```
+
+For the entire data set, the vast majority of gdpPercap is under 150000. 
+As a comparison, I again focused on just data from China: 
 
 
+```{r, echo=FALSE}
+filter(gapminder, country == "China")  %>%
+ggplot( aes(x = gdpPercap)) + geom_density()
+```
+
+We see the same general trend in China with most gdpPercap being very low but this graph is much easier to read without any of the larger values beyond 5000. 
+
+For my final graph, I explored the relationship between population and continents: 
+```{r, echo=FALSE}
+ggplot(gapminder, aes(x=continent, y=pop)) +
+    geom_boxplot(outlier.colour = "red")+
+geom_jitter(position = position_jitter(width = 0.05),alpha = .15)
+```
+
+This graph clearly shows that the population within Asia is much larger than the other continents. However, this graph is very hard to read. Since I have already looked a lot at China, let's focus on Eruope and Oceania: 
+
+```{r, echo=FALSE}
+filter(gapminder, continent == "Oceania" | continent == "Europe" )  %>%
+ggplot( aes(x=continent, y=pop)) +
+    geom_boxplot()
+```
+
+We can still see that Europe has a skew in their data towards larger populations but we can also see that for many of the data points Europe and Oceania had similiar reportings of population.
+
+
+Just as one last exploration I want to see the life expectancy by year but only for records with populations under half a million.
+```{r,echo=FALSE}
+kable(gapminder %>% 
+    filter(continent == "Asia",
+           pop <500000) %>% 
+    select(year, lifeExp) )
+```
+
+This is a bit hard to read so here is a graph: 
+```{r, echo=FALSE}
+gapminder %>% 
+    filter(continent == "Asia",
+           pop <500000) %>%  
+    select(year, lifeExp) %>%
+ggplot( aes(x=year, y=lifeExp)) +
+    geom_point() + geom_smooth(se = FALSE,method='lm')
+```
+
+For the lower populations, we see a clear increase in life expectancy over the years toping out at just over 70 for 1990s. 
+
+I was curious if higher population places in Asia would see a higher trend, perhaps by being in a larger country that may have more resources. Since I'd like to compare between the same time period, I limited my graph to populations over 500 million and to years prior to 1990. 
+
+
+```{r, echo=FALSE}
+gapminder %>% 
+    filter(continent == "Asia",
+           pop >500000000, year < 1990) %>%  
+ggplot( aes(x=year, y=lifeExp)) +
+    geom_point() + geom_smooth(se = FALSE,method='lm')
+```
+
+This seems to show the same trend but the life expectancy is lower at every data point.
+Perhaps though a better way to compare is to graph year and life expectancy and vary population plot point sizes:
+
+```{r, echo=FALSE}
+gapminder %>% 
+    filter(continent == "Asia",
+            year < 1990) %>%  
+ggplot( aes(x=year, y=lifeExp)) +
+    geom_point(aes(size=pop))
+```
+
+This makes it a lot easier to see that the lower population countries have higher life expectancy. 
+
+However, it this is a huge simplification as it really depends on how you look at the data. For example if we compare 3 continents prior to 1990 and with populations under half a million:
+```{r, echo=FALSE}
+gapminder %>% 
+    filter(pop <500000,year < 1990) %>%  
+ggplot( aes(x=year, y=lifeExp)) +
+    geom_point(aes(color=pop)) + facet_wrap(~ continent) 
+```
+These graphs show differences in the relationship between population and life expectancy between continents. 
+
+Here's another way to show the oversimplificaiton of the above graphs. By focusing on just four countries, you can see that here Japan has the highest population but consistently has higher life expectancy. I also found a theme to make this a bit more organized and professional looking. There is a whole package: ggthemes
+
+```{r, echo=FALSE}
+gapminder %>% 
+    filter(continent == "Asia", country %in% c("Taiwan", "Vietnam", "Japan", "Lebanon"),
+            year < 1990) %>%  
+ggplot( aes(x=year, y=lifeExp)) +
+    geom_point(aes(size=pop, colour=country)) + ggtitle("Final Graph") +theme_minimal() + labs(x = "Year", y= "Life Expectancy")
+```
+ 
+
+## I want to do more
+The example code given does not give all the data points for Rwanda and Afghanistan. The trouble here is that we need to pull all the data for these two countries then vectorize the two countries we are interested in. With the incorrect line we are filtering only cases where the country is equal to the vectors of Rwanda and Afghanistan.
+```{r}
+filter(gapminder, country == c("Rwanda", "Afghanistan"))
+```
+The proper code is here: 
+```{r}
+filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+```
+
+Alternatively, you could also write the code like this:
+```{r}
+filter(gapminder, country=="Rwanda" | country == "Afghanistan")
+```
 
