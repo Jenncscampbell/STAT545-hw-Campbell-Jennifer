@@ -18,6 +18,7 @@ I decided to explore the quantitative variables: Country, continent, year and li
 ### Exploring various plot types
 This was a lot of fun. I first just plotted the population and year and then once I realized that there were two population trends I tried to focus on just two countries likely to have different population trends. I then just poked around with some of the other data and continued to filter down groups to compare with. 
 Please don't judge my plot decisions to harshly. I was really just playing around with things to do. 
+After trying to compare more graphs next to each other I learned that you need to use facet_wrap when you have only a few graphs, facet_grid wont work
 
 ## I want to do more
 I understand that this is wrong an obviously gives you an incomplete output but I'm not entirely sure why. After the TAs advice here's what I think: 

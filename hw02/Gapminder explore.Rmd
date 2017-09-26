@@ -14,7 +14,7 @@ library(ggthemes)
 
 ## Smell test the data
 
-We can see from the `structure` command that GapMinder is a data.frame
+We can see from the `structure` command that GapMinder is a data.frame. 
 
 ```{r, echo=FALSE}
 str(gapminder)
@@ -22,7 +22,7 @@ str(gapminder)
 
 
 
-We see that Gapminder is a tibble data frame.
+We see that Gapminder is a tibble diff data frame.
 
 ```{r}
 class(gapminder)
@@ -140,7 +140,7 @@ This graph clearly shows that the population within Asia is much larger than the
 ```{r, echo=FALSE}
 filter(gapminder, continent == "Oceania" | continent == "Europe" )  %>%
 ggplot( aes(x=continent, y=pop)) +
-    geom_boxplot()
+    geom_boxplot(outlier.colour = "red")
 ```
 
 We can still see that Europe has a skew in their data towards larger populations but we can also see that for many of the data points Europe and Oceania had similiar reportings of population.
@@ -161,7 +161,7 @@ gapminder %>%
            pop <500000) %>%  
     select(year, lifeExp) %>%
 ggplot( aes(x=year, y=lifeExp)) +
-    geom_point() + geom_smooth(se = FALSE,method='lm')
+    geom_point(colour="dark blue") + geom_smooth(se = FALSE,method='lm', color="light blue")
 ```
 
 For the lower populations, we see a clear increase in life expectancy over the years toping out at just over 70 for 1990s. 
@@ -174,10 +174,33 @@ gapminder %>%
     filter(continent == "Asia",
            pop >500000000, year < 1990) %>%  
 ggplot( aes(x=year, y=lifeExp)) +
-    geom_point() + geom_smooth(se = FALSE,method='lm')
+    geom_point(colour="dark blue") + geom_smooth(se = FALSE,method='lm', colour="light blue")
 ```
 
 This seems to show the same trend but the life expectancy is lower at every data point.
+
+To better directly compare these groups which are under half a million and those over 500 million:
+A word of advice here is to check with View after each mutate line (like below) so that you can check what it is doing as you go.  
+
+```{r}
+gapminder  %>% 
+  mutate(popsize=NA) %>% 
+  mutate(popsize = ifelse(pop > 500000000, "large", popsize)) %>% View
+```
+```{r}
+gapminder  %>% 
+  mutate(popsize=NA) %>% 
+  mutate(popsize = ifelse(pop > 500000000, "large", popsize)) %>% 
+  mutate(popsize = ifelse(pop < 500000, "small", popsize)) %>% 
+  filter(!is.na(popsize)) %>% 
+   filter(continent == "Asia", year < 1990) %>%  
+ggplot( aes(x=year, y=lifeExp)) +
+  facet_wrap(~popsize) +
+    geom_point(colour="dark blue") + geom_smooth(se = FALSE,method='lm', colour="light blue")
+```
+
+
+
 Perhaps though a better way to compare is to graph year and life expectancy and vary population plot point sizes:
 
 ```{r, echo=FALSE}
@@ -185,10 +208,12 @@ gapminder %>%
     filter(continent == "Asia",
             year < 1990) %>%  
 ggplot( aes(x=year, y=lifeExp)) +
-    geom_point(aes(size=pop))
+    geom_point(colour="pink", aes(size=pop))
 ```
 
 This makes it a lot easier to see that the lower population countries have higher life expectancy. 
+
+
 
 However, it this is a huge simplification as it really depends on how you look at the data. For example if we compare 3 continents prior to 1990 and with populations under half a million:
 ```{r, echo=FALSE}
@@ -197,6 +222,8 @@ gapminder %>%
 ggplot( aes(x=year, y=lifeExp)) +
     geom_point(aes(color=pop)) + facet_wrap(~ continent) 
 ```
+
+
 These graphs show differences in the relationship between population and life expectancy between continents. 
 
 Here's another way to show the oversimplificaiton of the above graphs. By focusing on just four countries, you can see that here Japan has the highest population but consistently has higher life expectancy. I also found a theme to make this a bit more organized and professional looking. There is a whole package: ggthemes
@@ -211,7 +238,7 @@ ggplot( aes(x=year, y=lifeExp)) +
  
 
 ## I want to do more
-The example code given does not give all the data points for Rwanda and Afghanistan. The trouble here is that we need to pull all the data for these two countries then vectorize the two countries we are interested in. With the incorrect line we are filtering only cases where the country is equal to the vectors of Rwanda and Afghanistan.
+The example code given does not give all the data points for Rwanda and Afghanistan. The trouble here is that we need to pull all the data for these two countries then vectorize the two countries we are interested in. With the incorrect lne R is pulling Rwanda then Afghanistan and skipping every other year, esentially, it pulls only one country for each year rather than both countries.
 ```{r}
 filter(gapminder, country == c("Rwanda", "Afghanistan"))
 ```
