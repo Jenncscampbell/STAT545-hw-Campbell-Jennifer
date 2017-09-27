@@ -1,7 +1,5 @@
 ---
 title: "Gapminder Exploration"
-author: "JC"
-date: '2017-09-25'
 output: github_document
 ---
 
@@ -55,15 +53,17 @@ gapminder
 ```
 
 
- At the top of each row we can view the data type of each variable: 
+At the top of each row we can view the data type of each variable: 
+
 |   **Variable**  | **Data Type** |
-|-----------------|------------|
-| Country         | Factor     |
-| Continent       | Factor     |
-| Year            | Integer    |
-| LifeExp         | Double     |
-| Pop             | Integer    |
-| GdpPercap       | Double     |
+|-----------------|---------------|
+| Country         | Factor        |
+| Continent       | Factor        |
+| Year            | Integer       |
+| LifeExp         | Double        |
+| Pop             | Integer       |
+| GdpPercap       | Double        |
+
 
 
 ## Explore individual variables
@@ -96,15 +96,15 @@ gapminder %>%
 
 ## Explore various plot types
 
+My first exploration was on the relationship between population and year. 
 ```{r, echo=FALSE}
 ggplot(gapminder, aes(x=year, y=pop)) +
     geom_point()
 ```
 
-This plot between population and year seems to be quite interesting. This plot seems to reveal that there are two distinct sub populations here. We see that the vast majority of data points have a low population regarless of year but a few data points show a drastic increase in population over just a few years. 
+This plot between population and year seems to be quite interesting. This plot seems to reveal that there are two distinct sub populations here. We see that the vast majority of data points have a low population regarless of year but a few data points show a drastic increase in population over just a few years. Since there are so many data points here, I decided to focus my exploration on China and Canada.
 
-To further explore this, I created a plot of the population over years for China and Canada. Here we can more easily see how population has grown over the years differently across these two countries
-
+To further explore this, I created a plot of the population over years for China and Canada. Here we can more easily see how population has grown over the years differently across these two countries. 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 filter(gapminder, country == "China" | country == "Canada" ) %>%
@@ -112,23 +112,23 @@ filter(gapminder, country == "China" | country == "Canada" ) %>%
     geom_point(alpha=1, aes(colour= country))
 ```
 
-To explore the GDP per capital for the entire data set:
+To explore one quantitative variable, I ploted the GDP per capital for the entire data set:
 ```{r, echo=FALSE}
 ggplot(gapminder, aes(x = gdpPercap)) + geom_density()
 ```
 
 For the entire data set, the vast majority of gdpPercap is under 150000. 
-As a comparison, I again focused on just data from China: 
+As a comparison, I again focused on just data from China and Canada: 
 
 
 ```{r, echo=FALSE}
-filter(gapminder, country == "China")  %>%
-ggplot( aes(x = gdpPercap)) + geom_density()
+filter(gapminder, country == "China" | country == "Canada")  %>%
+ggplot( aes(x = gdpPercap)) + geom_density(aes(colour= country))
 ```
 
-We see the same general trend in China with most gdpPercap being very low but this graph is much easier to read without any of the larger values beyond 5000. 
+We see the same general trend in China with most gdpPercap records being very low but this graph, however, Canada shows a very differnet trend. Canada's distributionis much more uniform with the gdpPercap records being quite spread out. 
 
-For my final graph, I explored the relationship between population and continents: 
+For one qunatitative variable and one categorical variable plot, I explored the relationship between population and continents: 
 ```{r, echo=FALSE}
 ggplot(gapminder, aes(x=continent, y=pop)) +
     geom_boxplot(outlier.colour = "red")+
@@ -146,7 +146,7 @@ ggplot( aes(x=continent, y=pop)) +
 We can still see that Europe has a skew in their data towards larger populations but we can also see that for many of the data points Europe and Oceania had similiar reportings of population.
 
 
-Just as one last exploration I want to see the life expectancy by year but only for records with populations under half a million.
+For another exploration I want to see the life expectancy by year but only for records with populations under half a million.
 ```{r,echo=FALSE}
 kable(gapminder %>% 
     filter(continent == "Asia",
@@ -171,7 +171,7 @@ To better directly compare these groups which are under half a million and those
 
 
 
-```{r}
+```{r,echo=FALSE}
 gapminder  %>% 
   mutate(popsize=NA) %>% 
   mutate(popsize = ifelse(pop > 500000000, "large", popsize)) %>% 
@@ -186,9 +186,6 @@ ggplot( aes(x=year, y=lifeExp)) +
 This seems to show the same trend but the life expectancy is lower at every data point.
 
 > A word of advice here is to check with View after each mutate line (like below) so that you can check what it is doing as you go.  
-
-
-
 
 
 
@@ -217,7 +214,7 @@ ggplot( aes(x=year, y=lifeExp)) +
 
 These graphs show differences in the relationship between population and life expectancy between continents. 
 
-Here's another way to show the oversimplificaiton of the above graphs. By focusing on just four countries, you can see that here Japan has the highest population but consistently has higher life expectancy. I also found a theme to make this a bit more organized and professional looking. There is a whole package: ggthemes
+Here's another way to show the oversimplificaiton of the above graphs. By focusing on just four countries, you can see that here Japan has the highest population but consistently has higher life expectancy. I also found a theme to make this a bit more organized and professional looking. 
 
 ```{r, echo=FALSE}
 gapminder %>% 
@@ -229,13 +226,17 @@ ggplot( aes(x=year, y=lifeExp)) +
  
 
 ## I want to do more
-The example code given does not give all the data points for Rwanda and Afghanistan. The trouble here is that we need to pull all the data for these two countries then vectorize the two countries we are interested in. With the incorrect lne R is pulling Rwanda then Afghanistan and skipping every other year, esentially, it pulls only one country for each year rather than both countries.
+The example code given does not give all the data points for Rwanda and Afghanistan. The trouble here is that we need to pull all the data for these two countries then vectorize the two countries we are interested in. With the incorrect lne R is pulling Rwanda then Afghanistan and skipping every other year, esentially, it pulls only one country for each year rather than both countries. Codes like `filter(gapminder, country == c("Rwanda","Afghanistan",1))` This seemed to show that R is going row by row looking for Rwanda and then next row Afghanistan and then looking for 1 and so on. This results is exactly a third of the Rwanda and Afganistan data being pulled. Withe the code line `filter(gapminder, country == c("Rwanda","Afghanistan"))` this pulls half of the data alternating between the two countries. 
+### Other notes: 
 ```{r}
-filter(gapminder, country == c("Rwanda", "Afghanistan"))
+filter(gapminder, country == c("Rwanda","Afghanistan"))
+```
+```{r}
+filter(gapminder, country == c("Rwanda","Afghanistan"))
 ```
 The proper code is here: 
 ```{r}
-filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+filter(gapminder, country %in% c("Rwanda", "Canada"))
 ```
 
 Alternatively, you could also write the code like this:
