@@ -1,0 +1,74 @@
+HW 3 Gapminder Exploration
+================
+
+Task 1: Get the maximum and minimum of GDP per capita for all continents:
+-------------------------------------------------------------------------
+
+First I created a basic table with each continents's maximum and minimum GDP per capita:
+
+``` r
+kable(gapminder %>% 
+    group_by(continent) %>% 
+    summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap)))
+```
+
+| continent |  Max\_gdpPercap|  Min\_gdpPercap|
+|:----------|---------------:|---------------:|
+| Africa    |        21951.21|        241.1659|
+| Americas  |        42951.65|       1201.6372|
+| Asia      |       113523.13|        331.0000|
+| Europe    |        49357.19|        973.5332|
+| Oceania   |        34435.37|      10039.5956|
+
+Then I created a new dataframe object with just the data I was interested in.
+
+``` r
+mygdp<-
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap))
+```
+
+``` r
+mygdp
+```
+
+    ## # A tibble: 5 x 3
+    ##   continent Max_gdpPercap Min_gdpPercap
+    ##      <fctr>         <dbl>         <dbl>
+    ## 1    Africa      21951.21      241.1659
+    ## 2  Americas      42951.65     1201.6372
+    ## 3      Asia     113523.13      331.0000
+    ## 4    Europe      49357.19      973.5332
+    ## 5   Oceania      34435.37    10039.5956
+
+This table seems to show that Asia has the largest maximum GDP per capita and that Africa has the lowest. In terms of the minimum GDP per capita, Africa has the lowest while Oceania has the highest.
+
+Since I want r to cluster my max and min gdp per capitals, I need to put these into a single variable which r can then graph by colour. To do this I used the `melt` function.
+
+``` r
+gdp <- melt(mygdp[,c('continent','Max_gdpPercap','Min_gdpPercap')],id.vars = 1)
+ggplot(gdp,aes(x = continent,y = value)) + 
+  geom_bar(aes(fill = variable),stat = "identity",position = "dodge") 
+```
+
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png)
+
+This layout is still a bit tricky to read because of the large differences in gdp. So I put the y-axis on a log scale of 10 before cleaning up the graph.
+
+``` r
+p1<-ggplot(gdp,aes(x = continent,y = value)) + 
+  geom_bar(aes(fill = variable),stat = "identity",position = "dodge") +
+  scale_fill_discrete("GDP Per Capita Levels")  + 
+  scale_y_log10() 
+p1 + labs(x="Conintents", 
+          y="GDP Per Capita",
+          title="Maximum and Minimum GDP per capita")
+```
+
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png) \`\`\`
+
+In this graph we can see the maximum and minimum GDP per capita levels clearly for each continent. Overall, Asia appears to have the largest difference between the maximum and minimum GDP per capita in the records. However, Asia also has the highest maximum GDP per capita in the records. We can also see that Oceania has the smallest difference between its maximum and minimum GDP per capita levels. The highest minimum GDP per capita level belongs to Oceania while the lowest belongs to Africa.
+
+Task 2: Look at the spread of GDP per capita within the continents.
+-------------------------------------------------------------------
