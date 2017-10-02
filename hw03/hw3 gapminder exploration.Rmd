@@ -91,9 +91,59 @@ gapminder %>%
 
 This graph is much easier to read. Here we can easily compare the means and tell that Oceania and Europe have higher overall GDP per capita than Africa and Asia. However, the distribution is much more spread out for Asia than any of the other continents with Oceania showing little variation in GDP per capita than the other continents. We can also see that the maximum values are higher for Asia than the other continents. 
 
-### Task 3: Compute a weighted mean of life expectancy for different years. Here life expectancy is weighted by GDP per Capita.
+## Task 3: Compute a weighted mean of life expectancy for different years. Since we found in task 2 there is a huge difference in GDP per capita, I decided to create a weighted score of life expectancy by GPD per capita. 
+
+First I tried to just weight life expectancy by GDP per capita: 
+
+
+```{r,echo=FALSE, warning=FALSE, message=FALSE}
+kable(gapminder %>% 
+    group_by(year) %>%
+    mutate(Wlife= mean(gdpPercap) *mean(lifeExp)) %>%
+   summarize(meangdp =mean(gdpPercap), meanLife= mean(lifeExp), meanWlife=mean(Wlife)))
+```
+
+After creating this table I realized how hard it was to interpret the weighted life expectancy because of gdp per capita being so large. So instead I decided to weight life expectancy by the z-scores of gdp per capita.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+kable(
+gapminder %>% 
+   mutate(Scalegdp=((gdpPercap-mean(gdpPercap))/sd(gdpPercap))) %>%
+   mutate(WLife= ((gdpPercap-mean(gdpPercap))/sd(gdpPercap)) * lifeExp) %>%
+   group_by(year) %>%
+   summarize(meangdp =mean(gdpPercap), meanscaledgdp =mean(Scalegdp), meanLife= mean(lifeExp), meanWLife =mean(WLife)))
+```
+
+This makes it a bit easier to read. 
+Note: the weighted variable was created prior to the summarized table of means so the meanWLife is not equal to the meanscaledgdp X meanLife. 
+
+After creating this table, I realized that the intrepretation is still a bit tricky because gdp and lifeExp increase with time even with a scaled gdp factored in. 
+
+Here is a plot to make things clearer: 
+
+```{r}
+gapminder %>% 
+   mutate(Scalegdp=((gdpPercap-mean(gdpPercap))/sd(gdpPercap))) %>%
+   mutate(WLife= ((gdpPercap-mean(gdpPercap))/sd(gdpPercap)) * lifeExp) %>%
+   group_by(year) %>%
+   summarize(meangdp =mean(gdpPercap), meanscaledgdp =mean(Scalegdp), meanLife= mean(lifeExp), meanWLife =mean(WLife)) %>% 
+   ggplot(aes(x=year, y=meanWLife)) +
+   geom_line(alpha=0.5, shape=21) + 
+   labs(x="Year", 
+          y="Weighted Life Expectancy",
+          title="Life Expectancy Weighted by GDP per capita")
+```
+
+Well this is kind of boring but it does satify the "one graph for one idea" criteria. Even after accounting for GDP per capita, we see a steady increase of life expectancy as time goes on. 
+
+
+### Task 4: Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
+
+## I decided to compute the number of countries within each continent which have a median life expectancy below 40
 
 ```{r}
 
 ```
+
+
 
