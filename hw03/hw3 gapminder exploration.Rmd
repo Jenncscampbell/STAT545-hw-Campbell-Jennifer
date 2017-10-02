@@ -67,10 +67,33 @@ summarize(Mean=mean(gdpPercap),Min=min(gdpPercap), Max=max(gdpPercap), StdDev=sd
 ```
 
 
-```{r}
+This table is really hard to read. There is a lot of information. We can see that Europe and Oceania have higher means than the other continent but China has a much higher maximum than the rest. 
 
+The best way I think to plot data distributions like this is with box plots:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+gapminder %>%
+  ggplot(aes(x=continent, y=gdpPercap)) +
+  geom_boxplot(alpha=0.25, size=1, shape=1)  +
+  labs(title = "GPD Per Capita") 
 ```
 
 
+This is still very hard to read so I decided to have plot the log10 of the y-axis. 
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+gapminder %>%
+  ggplot(aes(x=continent, y=gdpPercap)) +
+  geom_boxplot(alpha=0.25, size=1, shape=1)  +
+  labs(x="Continents", y="GDP Per Capita", title = "GPD Per Capita") +
+  scale_y_log10() 
+```
+
+This graph is much easier to read. Here we can easily compare the means and tell that Oceania and Europe have higher overall GDP per capita than Africa and Asia. However, the distribution is much more spread out for Asia than any of the other continents with Oceania showing little variation in GDP per capita than the other continents. We can also see that the maximum values are higher for Asia than the other continents. 
+
+### Task 3: Compute a weighted mean of life expectancy for different years. Here life expectancy is weighted by GDP per Capita.
+
+```{r}
+
+```
 

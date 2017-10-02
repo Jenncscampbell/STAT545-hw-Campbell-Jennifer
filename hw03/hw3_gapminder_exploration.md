@@ -40,10 +40,24 @@ In this graph we can see the maximum and minimum GDP per capita levels clearly f
 Task 2: Look at the spread of GDP per capita within the continents.
 -------------------------------------------------------------------
 
-| continent |       Mean|         Min|        Max|  StdDev\_gpdPercap|        Q25|        Q50|        Q75|
-|:----------|----------:|-----------:|----------:|------------------:|----------:|----------:|----------:|
-| Africa    |   2193.755|    241.1659|   21951.21|           2827.930|    761.247|   1192.138|   2377.417|
-| Americas  |   7136.110|   1201.6372|   42951.65|           6396.764|   3427.779|   5465.510|   7830.210|
-| Asia      |   7902.150|    331.0000|  113523.13|          14045.373|   1056.993|   2646.787|   8549.256|
-| Europe    |  14469.476|    973.5332|   49357.19|           9355.213|   7213.085|  12081.749|  20461.386|
-| Oceania   |  18621.609|  10039.5956|   34435.37|           6358.983|  14141.859|  17983.304|  22214.117|
+| continent |       Mean|         Min|        Max|     StdDev|        Q25|        Q50|        Q75|
+|:----------|----------:|-----------:|----------:|----------:|----------:|----------:|----------:|
+| Africa    |   2193.755|    241.1659|   21951.21|   2827.930|    761.247|   1192.138|   2377.417|
+| Americas  |   7136.110|   1201.6372|   42951.65|   6396.764|   3427.779|   5465.510|   7830.210|
+| Asia      |   7902.150|    331.0000|  113523.13|  14045.373|   1056.993|   2646.787|   8549.256|
+| Europe    |  14469.476|    973.5332|   49357.19|   9355.213|   7213.085|  12081.749|  20461.386|
+| Oceania   |  18621.609|  10039.5956|   34435.37|   6358.983|  14141.859|  17983.304|  22214.117|
+
+This table is really hard to read. There is a lot of information. We can see that Europe and Oceania have higher means than the other continent but China has a much higher maximum than the rest.
+
+The best way I think to plot data distributions like this is with box plots:
+
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
+
+This is still very hard to read so I decided to have plot the log10 of the y-axis.
+
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
+
+This graph is much easier to read. Here we can easily compare the means and tell that Oceania and Europe have higher overall GDP per capita than Africa and Asia. However, the distribution is much more spread out for Asia than any of the other continents with Oceania showing little variation in GDP per capita than the other continents. We can also see that the maximum values are higher for Asia than the other continents.
+
+### Task 3: Compute a weighted mean of life expectancy for different years. Here life expectancy is weighted by GDP per Capita.
