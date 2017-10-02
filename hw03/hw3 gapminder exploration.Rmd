@@ -15,21 +15,21 @@ library(reshape2)
 
 ## Task 1: Get the maximum and minimum of GDP per capita for all continents:
 First I created a basic table with each continents's maximum and minimum GDP per capita:
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 kable(gapminder %>% 
     group_by(continent) %>% 
     summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap)))
 ```
 
 Then I created a new dataframe object with just the data I was interested in.
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 mygdp<-
 gapminder %>% 
   group_by(continent) %>% 
   summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap))
 ```
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 mygdp
 ```
 
@@ -37,7 +37,7 @@ This table seems to show that Asia has the largest maximum GDP per capita and th
 
 Since I want r to cluster my max and min gdp per capitals, I need to put these into a single variable which r can then graph by colour. To do this I used the `melt` function.
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 gdp <- melt(mygdp[,c('continent','Max_gdpPercap','Min_gdpPercap')],id.vars = 1)
 ggplot(gdp,aes(x = continent,y = value)) + 
   geom_bar(aes(fill = variable),stat = "identity",position = "dodge") 
@@ -45,7 +45,7 @@ ggplot(gdp,aes(x = continent,y = value)) +
 
 This layout is still a bit tricky to read because of the large differences in gdp. So I put the y-axis on a log scale of 10 before cleaning up the graph.
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 p1<-ggplot(gdp,aes(x = continent,y = value)) + 
   geom_bar(aes(fill = variable),stat = "identity",position = "dodge") +
   scale_fill_discrete("GDP Per Capita Levels")  + 
@@ -60,7 +60,17 @@ In this graph we can see the maximum and minimum GDP per capita levels clearly f
 
 ## Task 2: Look at the spread of GDP per capita within the continents.
 
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+kable(gapminder %>% 
+group_by(continent) %>% 
+summarize(Mean=mean(gdpPercap),Min=min(gdpPercap), Max=max(gdpPercap), StdDev=sd(gdpPercap), Q25=quantile(gdpPercap, probs=.25), Q50=quantile(gdpPercap, probs=.5), Q75=quantile(gdpPercap, probs=.75)))
+```
+
+
 ```{r}
 
 ```
+
+
+
 
