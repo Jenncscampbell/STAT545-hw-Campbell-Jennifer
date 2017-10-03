@@ -193,4 +193,4 @@ Here is a much cleaner graph to show our data:
 
 Here we can see that Africa had the largest number of countries with a very low average life expectancy for years before 1972 but after that African countries were more similiar to other continents. Most continents have very few countries with life expectancies under 40. One thing with this graph that drives me crazy is that Europe and Oceania both have zeros for all their data perfectly overlay. This results in a purple colour (blue and pink) for the bottom zeros. It's cool that it does that but for a reader it would be very confusing.
 
-So I added a jitter line to uncluster these data points which does make for a busier plot but now it is clearer what the data points are. ![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-17-1.png)
+So I added a jitter line to uncluster these data points which does make for a busier plot but now it is clearer what the data points are. I also made our lines smaller so that the data is more visible. ![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-17-1.png)
