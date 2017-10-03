@@ -152,7 +152,7 @@ gapminder %>%
 
 ```
 
-Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40.
+Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40. This function renames your variable titles so I tried to rename my columns. Unfortunately, I ran into an issue where the plyr package to rename your variables creates issues for the reshape package used above and then document wont knit. 
 
 
 

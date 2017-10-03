@@ -103,7 +103,7 @@ Task 4: Report the absolute and/or relative abundance of countries with low life
 
 First I created a groupy\_by code for continents, then I created a new variable which was the count of countries with a life expectancy below 40. My source for this code was actually just a modification of my hw2.
 
-Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40.
+Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40. This function renames your variable titles so I tried to rename my columns. Unfortunately, I ran into an issue where the plyr package to rename your variables creates issues for the reshape package used above and then document wont knit.
 
 This is really ugly table but has our information
 
