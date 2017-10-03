@@ -128,6 +128,7 @@ gapminder %>%
    summarize(meangdp =mean(gdpPercap), meanscaledgdp =mean(Scalegdp), meanLife= mean(lifeExp), meanWLife =mean(WLife)) %>% 
    ggplot(aes(x=year, y=meanWLife)) +
    geom_line(alpha=0.5, shape=21) + 
+   geom_point() +
    labs(x="Year", 
           y="Weighted Life Expectancy",
           title="Life Expectancy Weighted by GDP per capita")
