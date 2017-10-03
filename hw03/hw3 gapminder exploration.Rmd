@@ -166,7 +166,14 @@ This is really ugly table but has our information
 kable(Freq1)
 ```
 
-I'm sure there is a way to lay out this table much nicer. But since the assignment explicitly said not to worry about it, I moved on to the graph.
+A much nicer way to lay out this data is to use the `dcast` function from the `reshape2` package. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+Freq2 <- dcast(Freq1, Var2 ~ Var1)
+kable(Freq2)
+```
+
+
 
 Here is a much cleaner graph to show our data:
 

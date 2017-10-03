@@ -170,10 +170,25 @@ This is really ugly table but has our information
 | Europe   | 2007 |     0|
 | Oceania  | 2007 |     0|
 
-I'm sure there is a way to lay out this table much nicer. But since the assignment explicitly said not to worry about it, I moved on to the graph.
+A much nicer way to lay out this data is to use the `dcast` function from the `reshape2` package.
+
+| Var2 |  Africa|  Americas|  Asia|  Europe|  Oceania|
+|:-----|-------:|---------:|-----:|-------:|--------:|
+| 1952 |      29|         1|    10|       0|        0|
+| 1957 |      23|         0|     5|       0|        0|
+| 1962 |      15|         0|     3|       0|        0|
+| 1967 |      10|         0|     2|       0|        0|
+| 1972 |       6|         0|     2|       0|        0|
+| 1977 |       3|         0|     2|       0|        0|
+| 1982 |       3|         0|     1|       0|        0|
+| 1987 |       1|         0|     0|       0|        0|
+| 1992 |       3|         0|     0|       0|        0|
+| 1997 |       2|         0|     0|       0|        0|
+| 2002 |       2|         0|     0|       0|        0|
+| 2007 |       1|         0|     0|       0|        0|
 
 Here is a much cleaner graph to show our data:
 
-![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-15-1.png)
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-16-1.png)
 
 Here we can see that Africa had the largest number of countries with a very low average life expectancy for years before 1972 but after that African countries were more similiar to other continents. Most continents have very few countries with life expectancies under 40. One thing with this graph that drives me crazy is that Europe and Oceania both have zeros for all their data perfectly overlay. This results in a purple colour (blue and pink) for the bottome zeros. It's cool that it does that but for a reader it would be very confusing.
