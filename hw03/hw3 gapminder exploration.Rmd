@@ -73,7 +73,7 @@ The best way I think to plot data distributions like this is with box plots:
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 gapminder %>%
   ggplot(aes(x=continent, y=gdpPercap)) +
-  geom_boxplot(alpha=0.25, size=1, shape=1)  +
+  geom_boxplot(outlier.colour = "red", alpha=0.25, size=1, shape=1)  +
   labs(title = "GPD Per Capita") 
 ```
 
