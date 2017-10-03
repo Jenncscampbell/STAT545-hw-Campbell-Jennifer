@@ -14,26 +14,15 @@ First I created a basic table with each continents's maximum and minimum GDP per
 | Europe    |        49357.19|        973.5332|
 | Oceania   |        34435.37|      10039.5956|
 
-Then I created a new dataframe object with just the data I was interested in.
-
-    ## # A tibble: 5 x 3
-    ##   continent Max_gdpPercap Min_gdpPercap
-    ##      <fctr>         <dbl>         <dbl>
-    ## 1    Africa      21951.21      241.1659
-    ## 2  Americas      42951.65     1201.6372
-    ## 3      Asia     113523.13      331.0000
-    ## 4    Europe      49357.19      973.5332
-    ## 5   Oceania      34435.37    10039.5956
-
 This table seems to show that Asia has the largest maximum GDP per capita and that Africa has the lowest. In terms of the minimum GDP per capita, Africa has the lowest while Oceania has the highest.
 
-Since I want r to cluster my max and min gdp per capitals, I need to put these into a single variable which r can then graph by colour. To do this I used the `melt` function.
+Since I want r to cluster my max and min gdp per capitals, I need to put these into a single variable which r can then graph by colour. To do this I first created a data frame of only the data I needed and then I used the `melt` function to restructure the data for clustering.
 
-![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png)
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-4-1.png)
 
 This layout is still a bit tricky to read because of the large differences in gdp. So I put the y-axis on a log scale of 10 before cleaning up the graph.
 
-![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-6-1.png) \`\`\`
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-5-1.png) \`\`\`
 
 In this graph we can see the maximum and minimum GDP per capita levels clearly for each continent. Overall, Asia appears to have the largest difference between the maximum and minimum GDP per capita in the records. However, Asia also has the highest maximum GDP per capita in the records. We can also see that Oceania has the smallest difference between its maximum and minimum GDP per capita levels. The highest minimum GDP per capita level belongs to Oceania while the lowest belongs to Africa.
 
@@ -52,11 +41,11 @@ This table is really hard to read. There is a lot of information. We can see tha
 
 The best way I think to plot data distributions like this is with box plots:
 
-![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-7-1.png)
 
 This is still very hard to read so I decided to have plot the log10 of the y-axis.
 
-![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
 
 This graph is much easier to read. Here we can easily compare the means and tell that Oceania and Europe have higher overall GDP per capita than Africa and Asia. However, the distribution is much more spread out for Asia than any of the other continents with Oceania showing little variation in GDP per capita than the other continents. We can also see that the maximum values are higher for Asia than the other continents.
 
@@ -103,26 +92,88 @@ After creating this table, I realized that the intrepretation is still a bit tri
 
 Here is a plot to make things clearer:
 
-``` r
-gapminder %>% 
-   mutate(Scalegdp=((gdpPercap-mean(gdpPercap))/sd(gdpPercap))) %>%
-   mutate(WLife= ((gdpPercap-mean(gdpPercap))/sd(gdpPercap)) * lifeExp) %>%
-   group_by(year) %>%
-   summarize(meangdp =mean(gdpPercap), meanscaledgdp =mean(Scalegdp), meanLife= mean(lifeExp), meanWLife =mean(WLife)) %>% 
-   ggplot(aes(x=year, y=meanWLife)) +
-   geom_line(alpha=0.5, shape=21) + 
-   labs(x="Year", 
-          y="Weighted Life Expectancy",
-          title="Life Expectancy Weighted by GDP per capita")
-```
-
-    ## Warning: Ignoring unknown parameters: shape
-
-![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-12-1.png)
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-11-1.png)
 
 Well this is kind of boring but it does satify the "one graph for one idea" criteria. Even after accounting for GDP per capita, we see a steady increase of life expectancy as time goes on.
 
-### Task 4: Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
+Task 4: Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-I decided to compute the number of countries within each continent which have a median life expectancy below 40
----------------------------------------------------------------------------------------------------------------
+### I decided to compute the number of countries within each continent which have a median life expectancy below 40.
+
+First I created a groupy\_by code for continents, then I created a new variable which was the count of countries with a life expectancy below 40. My source for this code was actually just a modification of my hw2.
+
+Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40.
+
+This is really ugly table but has our information
+
+| Var1     | Var2 |  Freq|
+|:---------|:-----|-----:|
+| Africa   | 1952 |    29|
+| Americas | 1952 |     1|
+| Asia     | 1952 |    10|
+| Europe   | 1952 |     0|
+| Oceania  | 1952 |     0|
+| Africa   | 1957 |    23|
+| Americas | 1957 |     0|
+| Asia     | 1957 |     5|
+| Europe   | 1957 |     0|
+| Oceania  | 1957 |     0|
+| Africa   | 1962 |    15|
+| Americas | 1962 |     0|
+| Asia     | 1962 |     3|
+| Europe   | 1962 |     0|
+| Oceania  | 1962 |     0|
+| Africa   | 1967 |    10|
+| Americas | 1967 |     0|
+| Asia     | 1967 |     2|
+| Europe   | 1967 |     0|
+| Oceania  | 1967 |     0|
+| Africa   | 1972 |     6|
+| Americas | 1972 |     0|
+| Asia     | 1972 |     2|
+| Europe   | 1972 |     0|
+| Oceania  | 1972 |     0|
+| Africa   | 1977 |     3|
+| Americas | 1977 |     0|
+| Asia     | 1977 |     2|
+| Europe   | 1977 |     0|
+| Oceania  | 1977 |     0|
+| Africa   | 1982 |     3|
+| Americas | 1982 |     0|
+| Asia     | 1982 |     1|
+| Europe   | 1982 |     0|
+| Oceania  | 1982 |     0|
+| Africa   | 1987 |     1|
+| Americas | 1987 |     0|
+| Asia     | 1987 |     0|
+| Europe   | 1987 |     0|
+| Oceania  | 1987 |     0|
+| Africa   | 1992 |     3|
+| Americas | 1992 |     0|
+| Asia     | 1992 |     0|
+| Europe   | 1992 |     0|
+| Oceania  | 1992 |     0|
+| Africa   | 1997 |     2|
+| Americas | 1997 |     0|
+| Asia     | 1997 |     0|
+| Europe   | 1997 |     0|
+| Oceania  | 1997 |     0|
+| Africa   | 2002 |     2|
+| Americas | 2002 |     0|
+| Asia     | 2002 |     0|
+| Europe   | 2002 |     0|
+| Oceania  | 2002 |     0|
+| Africa   | 2007 |     1|
+| Americas | 2007 |     0|
+| Asia     | 2007 |     0|
+| Europe   | 2007 |     0|
+| Oceania  | 2007 |     0|
+
+I'm sure there is a way to lay out this table much nicer. But since the assignment explicitly said not to worry about it, I moved on to the graph.
+
+Here is a much cleaner graph to show our data:
+
+![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-15-1.png)
+
+Here we can see that Africa had the largest number of countries with a very low average life expectancy for years before 1972 but after that African countries were more similiar to other continents. Most continents have very few countries with life expectancies under 40. One thing with this graph that drives me crazy is that Europe and Oceania both have zeros for all their data perfectly overlay. This results in a purple colour (blue and pink) for the bottome zeros. It's cool that it does that but for a reader it would be very confusing.

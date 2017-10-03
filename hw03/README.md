@@ -15,4 +15,5 @@ I had a lot mutating my variables for this weighted mean. I spent a lot of time 
 ### Task 4: Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
 
 ## I decided to compute the number of countries within each continent which have a median life expectancy below 40
-
+It was pretty easy to create the mutate functions to count all the countries with life expectancies below 40. It took me forever to get a correct frequency count. I finally modified code from this (stackoverflow page)[https://stackoverflow.com/questions/25293045/count-number-of-rows-in-a-data-frame-in-r-based-on-group] 
+I had some issues on this graph. ggplot really didn't like my data.frame. I couldn't get the line to show up. I tried several functions but kept getting errors about there only being one observation per group. 

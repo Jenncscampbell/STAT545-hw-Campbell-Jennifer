@@ -21,21 +21,20 @@ kable(gapminder %>%
     summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap)))
 ```
 
-Then I created a new dataframe object with just the data I was interested in.
+
+
+
+
+
+This table seems to show that Asia has the largest maximum GDP per capita and that Africa has the lowest. In terms of the minimum GDP per capita, Africa has the lowest while Oceania has the highest.
+
+Since I want r to cluster my max and min gdp per capitals, I need to put these into a single variable which r can then graph by colour. To do this I first created a data frame of only the data I needed and then I used the `melt` function to restructure the data for clustering.
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 mygdp<-
 gapminder %>% 
   group_by(continent) %>% 
   summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap))
 ```
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-mygdp
-```
-
-This table seems to show that Asia has the largest maximum GDP per capita and that Africa has the lowest. In terms of the minimum GDP per capita, Africa has the lowest while Oceania has the highest.
-
-Since I want r to cluster my max and min gdp per capitals, I need to put these into a single variable which r can then graph by colour. To do this I used the `melt` function.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 gdp <- melt(mygdp[,c('continent','Max_gdpPercap','Min_gdpPercap')],id.vars = 1)
@@ -121,7 +120,7 @@ After creating this table, I realized that the intrepretation is still a bit tri
 
 Here is a plot to make things clearer: 
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 gapminder %>% 
    mutate(Scalegdp=((gdpPercap-mean(gdpPercap))/sd(gdpPercap))) %>%
    mutate(WLife= ((gdpPercap-mean(gdpPercap))/sd(gdpPercap)) * lifeExp) %>%
@@ -137,13 +136,49 @@ gapminder %>%
 Well this is kind of boring but it does satify the "one graph for one idea" criteria. Even after accounting for GDP per capita, we see a steady increase of life expectancy as time goes on. 
 
 
-### Task 4: Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
+## Task 4: Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
 
-## I decided to compute the number of countries within each continent which have a median life expectancy below 40
+### I decided to compute the number of countries within each continent which have a median life expectancy below 40. 
 
-```{r}
+First I created a groupy_by code for continents, then I created a new variable which was the count of countries with a life expectancy below 40. My source for this code was actually just a modification of my hw2. 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+Lifedata2<-(
+gapminder %>% 
+  mutate(MyExp=NA) %>% 
+  mutate(MyExp = ifelse(lifeExp < 40, "1", MyExp)) %>% 
+  mutate(MyExp = as.numeric(MyExp)) %>% 
+  filter(!is.na(MyExp)))
 
 ```
 
+Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40.
 
 
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+Freq1 <- data.frame(table(Lifedata2$continent, Lifedata2$year))
+```
+
+
+This is really ugly table but has our information
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+kable(Freq1)
+```
+
+I'm sure there is a way to lay out this table much nicer. But since the assignment explicitly said not to worry about it, I moved on to the graph.
+
+Here is a much cleaner graph to show our data:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+Freq1 %>%
+arrange(Var1, Var2, Freq) %>%
+  ggplot(aes(x=Var2, y=Freq)) +
+  geom_point(mapping= aes(colour= Var1), alpha=0.5, size=2) +
+  geom_path(aes(colour= Var1)) +
+  labs(x="Years", 
+          y="Number of Countries",
+          title="Number of countries with a median life expectancy below 40")
+```
+
+Here we can see that Africa had the largest number of countries with a very low average life expectancy for years before 1972 but after that African countries were more similiar to other continents. Most continents have very few countries with life expectancies under 40. One thing with this graph that drives me crazy is that Europe and Oceania both have zeros for all their data perfectly overlay. This results in a purple colour (blue and pink) for the bottome zeros. It's cool that it does that but for a reader it would be very confusing. 
