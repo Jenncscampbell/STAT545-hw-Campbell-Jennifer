@@ -127,12 +127,13 @@ gapminder %>%
    group_by(year) %>%
    summarize(meangdp =mean(gdpPercap), meanscaledgdp =mean(Scalegdp), meanLife= mean(lifeExp), meanWLife =mean(WLife)) %>% 
    ggplot(aes(x=year, y=meanWLife)) +
-   geom_line(alpha=0.5, shape=21) + 
+   geom_smooth(alpha=0.5) + 
    geom_point() +
    labs(x="Year", 
           y="Weighted Life Expectancy",
           title="Life Expectancy Weighted by GDP per capita")
 ```
+
 
 Well this is kind of boring but it does satify the "one graph for one idea" criteria. Even after accounting for GDP per capita, we see a steady increase of life expectancy as time goes on. 
 
@@ -188,7 +189,20 @@ arrange(Continent, Year, Freq) %>%
   geom_smooth(aes(colour= Continent)) +
   labs(x="Years", 
           y="Number of Countries",
-          title="Number of countries with a median life expectancy below 40")
-```
+          title="Number of countries with a median\nlife expectancy below 40")
+``` 
 
-Here we can see that Africa had the largest number of countries with a very low average life expectancy for years before 1972 but after that African countries were more similiar to other continents. Most continents have very few countries with life expectancies under 40. One thing with this graph that drives me crazy is that Europe and Oceania both have zeros for all their data perfectly overlay. This results in a purple colour (blue and pink) for the bottome zeros. It's cool that it does that but for a reader it would be very confusing. 
+Here we can see that Africa had the largest number of countries with a very low average life expectancy for years before 1972 but after that African countries were more similiar to other continents. Most continents have very few countries with life expectancies under 40. One thing with this graph that drives me crazy is that Europe and Oceania both have zeros for all their data perfectly overlay. This results in a purple colour (blue and pink) for the bottom zeros. It's cool that it does that but for a reader it would be very confusing.
+
+So I added a jitter line to uncluster these data points which does make for a busier plot but now it is clearer what the data points are.
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+Freq1 %>%
+arrange(Continent, Year, Freq) %>%
+  ggplot(aes(x=Year, y=Freq)) +
+  geom_point(mapping= aes(colour= Continent), alpha=0.5, size=2) +
+  geom_smooth(aes(colour= Continent)) +
+  geom_jitter(position = position_jitter(width = 0.5),alpha = .15) +
+  labs(x="Years", 
+          y="Number of Countries",
+          title="Number of countries with a median\nlife expectancy below 40")
+``` 
