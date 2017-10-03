@@ -83,7 +83,7 @@ This is still very hard to read so I decided to have plot the log10 of the y-axi
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 gapminder %>%
   ggplot(aes(x=continent, y=gdpPercap)) +
-  geom_boxplot(alpha=0.25, size=1, shape=1)  +
+  geom_boxplot(outlier.colour = "red", alpha=0.25, size=1, shape=1)  +
   labs(x="Continents", y="GDP Per Capita", title = "GPD Per Capita") +
   scale_y_log10() 
 ```
@@ -179,7 +179,8 @@ kable(Freq2)
 
 
 
-Here is a much cleaner graph to show our data:
+Here is a much cleaner graph to show our data: 
+Note to self: I had to include a mutate funciton here because `Year` was originally a factor. This code fixes that `mutate(Year=as.numeric(as.character(Year)))`.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 Freq1 %>%

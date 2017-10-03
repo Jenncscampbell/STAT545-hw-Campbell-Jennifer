@@ -187,7 +187,7 @@ A much nicer way to lay out this data is to use the `dcast` function from the `r
 | 2002 |       2|         0|     0|       0|        0|
 | 2007 |       1|         0|     0|       0|        0|
 
-Here is a much cleaner graph to show our data:
+Here is a much cleaner graph to show our data: Note to self: I had to include a mutate funciton here because `Year` was originally a factor. This code fixes that `mutate(Year=as.numeric(as.character(Year)))`.
 
 ![](hw3_gapminder_exploration_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-16-1.png)
 
