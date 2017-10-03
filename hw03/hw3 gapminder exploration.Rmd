@@ -152,12 +152,14 @@ gapminder %>%
 
 ```
 
-Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40. This function renames your variable titles so I tried to rename my columns. Unfortunately, I ran into an issue where the plyr package to rename your variables creates issues for the reshape package used above and then document wont knit. 
+Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40. This function renames your variable titles so I next have a line in here to rename my variables.
 
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 Freq1 <- data.frame(table(Lifedata2$continent, Lifedata2$year))
+colnames(Freq1)[colnames(Freq1)=="Var2"] <- "Year"
+colnames(Freq1)[colnames(Freq1)=="Var1"] <- "Continent"
 ```
 
 
@@ -169,7 +171,7 @@ kable(Freq1)
 A much nicer way to lay out this data is to use the `dcast` function from the `reshape2` package. 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-Freq2 <- dcast(Freq1, Var2 ~ Var1)
+Freq2 <- dcast(Freq1, Year ~ Continent)
 kable(Freq2)
 ```
 
@@ -179,10 +181,10 @@ Here is a much cleaner graph to show our data:
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 Freq1 %>%
-arrange(Var1, Var2, Freq) %>%
-  ggplot(aes(x=Var2, y=Freq)) +
-  geom_point(mapping= aes(colour= Var1), alpha=0.5, size=2) +
-  geom_path(aes(colour= Var1)) +
+arrange(Continent, Year, Freq) %>%
+  ggplot(aes(x=Year, y=Freq)) +
+  geom_point(mapping= aes(colour= Continent), alpha=0.5, size=2) +
+  geom_path(aes(colour= Continent)) +
   labs(x="Years", 
           y="Number of Countries",
           title="Number of countries with a median life expectancy below 40")

@@ -103,76 +103,76 @@ Task 4: Report the absolute and/or relative abundance of countries with low life
 
 First I created a groupy\_by code for continents, then I created a new variable which was the count of countries with a life expectancy below 40. My source for this code was actually just a modification of my hw2.
 
-Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40. This function renames your variable titles so I tried to rename my columns. Unfortunately, I ran into an issue where the plyr package to rename your variables creates issues for the reshape package used above and then document wont knit.
+Now to aggregate group by continent and year a freqency column reporting the number of countries that have a life expectancy under 40. This function renames your variable titles so I next have a line in here to rename my variables.
 
 This is really ugly table but has our information
 
-| Var1     | Var2 |  Freq|
-|:---------|:-----|-----:|
-| Africa   | 1952 |    29|
-| Americas | 1952 |     1|
-| Asia     | 1952 |    10|
-| Europe   | 1952 |     0|
-| Oceania  | 1952 |     0|
-| Africa   | 1957 |    23|
-| Americas | 1957 |     0|
-| Asia     | 1957 |     5|
-| Europe   | 1957 |     0|
-| Oceania  | 1957 |     0|
-| Africa   | 1962 |    15|
-| Americas | 1962 |     0|
-| Asia     | 1962 |     3|
-| Europe   | 1962 |     0|
-| Oceania  | 1962 |     0|
-| Africa   | 1967 |    10|
-| Americas | 1967 |     0|
-| Asia     | 1967 |     2|
-| Europe   | 1967 |     0|
-| Oceania  | 1967 |     0|
-| Africa   | 1972 |     6|
-| Americas | 1972 |     0|
-| Asia     | 1972 |     2|
-| Europe   | 1972 |     0|
-| Oceania  | 1972 |     0|
-| Africa   | 1977 |     3|
-| Americas | 1977 |     0|
-| Asia     | 1977 |     2|
-| Europe   | 1977 |     0|
-| Oceania  | 1977 |     0|
-| Africa   | 1982 |     3|
-| Americas | 1982 |     0|
-| Asia     | 1982 |     1|
-| Europe   | 1982 |     0|
-| Oceania  | 1982 |     0|
-| Africa   | 1987 |     1|
-| Americas | 1987 |     0|
-| Asia     | 1987 |     0|
-| Europe   | 1987 |     0|
-| Oceania  | 1987 |     0|
-| Africa   | 1992 |     3|
-| Americas | 1992 |     0|
-| Asia     | 1992 |     0|
-| Europe   | 1992 |     0|
-| Oceania  | 1992 |     0|
-| Africa   | 1997 |     2|
-| Americas | 1997 |     0|
-| Asia     | 1997 |     0|
-| Europe   | 1997 |     0|
-| Oceania  | 1997 |     0|
-| Africa   | 2002 |     2|
-| Americas | 2002 |     0|
-| Asia     | 2002 |     0|
-| Europe   | 2002 |     0|
-| Oceania  | 2002 |     0|
-| Africa   | 2007 |     1|
-| Americas | 2007 |     0|
-| Asia     | 2007 |     0|
-| Europe   | 2007 |     0|
-| Oceania  | 2007 |     0|
+| Continent | Year |  Freq|
+|:----------|:-----|-----:|
+| Africa    | 1952 |    29|
+| Americas  | 1952 |     1|
+| Asia      | 1952 |    10|
+| Europe    | 1952 |     0|
+| Oceania   | 1952 |     0|
+| Africa    | 1957 |    23|
+| Americas  | 1957 |     0|
+| Asia      | 1957 |     5|
+| Europe    | 1957 |     0|
+| Oceania   | 1957 |     0|
+| Africa    | 1962 |    15|
+| Americas  | 1962 |     0|
+| Asia      | 1962 |     3|
+| Europe    | 1962 |     0|
+| Oceania   | 1962 |     0|
+| Africa    | 1967 |    10|
+| Americas  | 1967 |     0|
+| Asia      | 1967 |     2|
+| Europe    | 1967 |     0|
+| Oceania   | 1967 |     0|
+| Africa    | 1972 |     6|
+| Americas  | 1972 |     0|
+| Asia      | 1972 |     2|
+| Europe    | 1972 |     0|
+| Oceania   | 1972 |     0|
+| Africa    | 1977 |     3|
+| Americas  | 1977 |     0|
+| Asia      | 1977 |     2|
+| Europe    | 1977 |     0|
+| Oceania   | 1977 |     0|
+| Africa    | 1982 |     3|
+| Americas  | 1982 |     0|
+| Asia      | 1982 |     1|
+| Europe    | 1982 |     0|
+| Oceania   | 1982 |     0|
+| Africa    | 1987 |     1|
+| Americas  | 1987 |     0|
+| Asia      | 1987 |     0|
+| Europe    | 1987 |     0|
+| Oceania   | 1987 |     0|
+| Africa    | 1992 |     3|
+| Americas  | 1992 |     0|
+| Asia      | 1992 |     0|
+| Europe    | 1992 |     0|
+| Oceania   | 1992 |     0|
+| Africa    | 1997 |     2|
+| Americas  | 1997 |     0|
+| Asia      | 1997 |     0|
+| Europe    | 1997 |     0|
+| Oceania   | 1997 |     0|
+| Africa    | 2002 |     2|
+| Americas  | 2002 |     0|
+| Asia      | 2002 |     0|
+| Europe    | 2002 |     0|
+| Oceania   | 2002 |     0|
+| Africa    | 2007 |     1|
+| Americas  | 2007 |     0|
+| Asia      | 2007 |     0|
+| Europe    | 2007 |     0|
+| Oceania   | 2007 |     0|
 
 A much nicer way to lay out this data is to use the `dcast` function from the `reshape2` package.
 
-| Var2 |  Africa|  Americas|  Asia|  Europe|  Oceania|
+| Year |  Africa|  Americas|  Asia|  Europe|  Oceania|
 |:-----|-------:|---------:|-----:|-------:|--------:|
 | 1952 |      29|         1|    10|       0|        0|
 | 1957 |      23|         0|     5|       0|        0|
