@@ -184,7 +184,7 @@ Freq1 %>%
 arrange(Continent, Year, Freq) %>%
   ggplot(aes(x=Year, y=Freq)) +
   geom_point(mapping= aes(colour= Continent), alpha=0.5, size=2) +
-  geom_path(aes(colour= Continent)) +
+  geom_smooth(aes(colour= Continent)) +
   labs(x="Years", 
           y="Number of Countries",
           title="Number of countries with a median life expectancy below 40")
