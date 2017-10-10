@@ -1,6 +1,9 @@
 Home Work 4
 ================
 
+General data reshaping and relationship to aggregation
+======================================================
+
 Activity \#3
 ------------
 
