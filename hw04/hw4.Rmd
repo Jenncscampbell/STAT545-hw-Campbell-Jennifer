@@ -117,3 +117,19 @@ gapminder %>%
           title="Mean Life Expectancy Across Time")
 
 ```
+
+#Join, merge, look up
+
+##Activity #1
+
+Create a second data frame, complementary to Gapminder.
+- I created a Nato country dataset which included two variables: country and natyear  (year the country joined Nato)
+
+
+
+
+
+
+
+
+## Activity #3

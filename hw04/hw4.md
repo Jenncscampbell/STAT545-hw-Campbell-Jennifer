@@ -175,3 +175,14 @@ gapminder %>%
 ```
 
 ![](hw4_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
+
+Join, merge, look up
+====================
+
+Activity \#1
+------------
+
+Create a second data frame, complementary to Gapminder. - I created a Nato country dataset which included two variables: country and natyear (year the country joined Nato)
+
+Activity \#3
+------------
