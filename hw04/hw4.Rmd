@@ -1,5 +1,5 @@
 ---
-title: "hw4"
+title: "Home Work 4"
 output: github_document
 ---
 
@@ -81,4 +81,20 @@ gapminder %>%
           title="Mean Life Expectancy of Asia and Africa")
 
 ```
+I then remembered that I could convey the years by color though. At least that is a less misleading graph. 
 
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(continent, Mean_lifeExp) %>% 
+  ggplot(aes(x = Asia,y = Africa)) + 
+  geom_point(mapping= aes(colour= year), alpha=0.5, size=2) +
+  geom_smooth(alpha=0.5, size=.5, se = FALSE, color= "pink") + 
+  labs(x="Mean life expectancy of Asia", 
+          y="Mean Life Expectancy of Africa",
+          title="Mean Life Expectancy of Asia and Africa")
+
+```
+
+I really couldn't figure out how to add more continents to the plot when they are listed as their own variables and still create a legible, interpretable graph. I could have added other visual factors to add continents (for example a color by Europe) but then on a graph it is really confusing. 
