@@ -230,5 +230,180 @@ kable(nato)
 | Croatia        |     2009|
 | Montenegro     |     2017|
 
+-Explore the different types of joins:
+
+1.  First I decided to explore the lef\_join function
+
+``` r
+gapminder %>% 
+  left_join(nato) 
+```
+
+    ## Joining, by = "country"
+
+    ## Warning: Column `country` joining factor and character vector, coercing
+    ## into character vector
+
+    ## # A tibble: 1,704 x 7
+    ##        country continent  year lifeExp      pop gdpPercap natyear
+    ##          <chr>    <fctr> <int>   <dbl>    <int>     <dbl>   <int>
+    ##  1 Afghanistan      Asia  1952  28.801  8425333  779.4453      NA
+    ##  2 Afghanistan      Asia  1957  30.332  9240934  820.8530      NA
+    ##  3 Afghanistan      Asia  1962  31.997 10267083  853.1007      NA
+    ##  4 Afghanistan      Asia  1967  34.020 11537966  836.1971      NA
+    ##  5 Afghanistan      Asia  1972  36.088 13079460  739.9811      NA
+    ##  6 Afghanistan      Asia  1977  38.438 14880372  786.1134      NA
+    ##  7 Afghanistan      Asia  1982  39.854 12881816  978.0114      NA
+    ##  8 Afghanistan      Asia  1987  40.822 13867957  852.3959      NA
+    ##  9 Afghanistan      Asia  1992  41.674 16317921  649.3414      NA
+    ## 10 Afghanistan      Asia  1997  41.763 22227415  635.3414      NA
+    ## # ... with 1,694 more rows
+
+The left join still returns all rows and columns from the gapminder set so we have a bunch of NAs for all the countries that never joined NATO.
+
+Now say I wanted only the NATO countries. Then I would use `inner_join` to only return the data for countries that are in my NATO data set.
+
+``` r
+gapminder %>% 
+  inner_join(nato) 
+```
+
+    ## Joining, by = "country"
+
+    ## Warning: Column `country` joining factor and character vector, coercing
+    ## into character vector
+
+    ## # A tibble: 288 x 7
+    ##    country continent  year lifeExp     pop gdpPercap natyear
+    ##      <chr>    <fctr> <int>   <dbl>   <int>     <dbl>   <int>
+    ##  1 Albania    Europe  1952  55.230 1282697  1601.056    2009
+    ##  2 Albania    Europe  1957  59.280 1476505  1942.284    2009
+    ##  3 Albania    Europe  1962  64.820 1728137  2312.889    2009
+    ##  4 Albania    Europe  1967  66.220 1984060  2760.197    2009
+    ##  5 Albania    Europe  1972  67.690 2263554  3313.422    2009
+    ##  6 Albania    Europe  1977  68.930 2509048  3533.004    2009
+    ##  7 Albania    Europe  1982  70.420 2780097  3630.881    2009
+    ##  8 Albania    Europe  1987  72.000 3075321  3738.933    2009
+    ##  9 Albania    Europe  1992  71.581 3326498  2497.438    2009
+    ## 10 Albania    Europe  1997  72.950 3428038  3193.055    2009
+    ## # ... with 278 more rows
+
+Next I wanted to do the opposite and only see the data for the countries that are not in NATO:
+
+``` r
+gapminder %>% 
+  anti_join(nato) 
+```
+
+    ## Joining, by = "country"
+
+    ## Warning: Column `country` joining factor and character vector, coercing
+    ## into character vector
+
+    ## # A tibble: 1,416 x 6
+    ##        country continent  year lifeExp      pop gdpPercap
+    ##         <fctr>    <fctr> <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan      Asia  1952  28.801  8425333  779.4453
+    ##  2 Afghanistan      Asia  1957  30.332  9240934  820.8530
+    ##  3 Afghanistan      Asia  1962  31.997 10267083  853.1007
+    ##  4 Afghanistan      Asia  1967  34.020 11537966  836.1971
+    ##  5 Afghanistan      Asia  1972  36.088 13079460  739.9811
+    ##  6 Afghanistan      Asia  1977  38.438 14880372  786.1134
+    ##  7 Afghanistan      Asia  1982  39.854 12881816  978.0114
+    ##  8 Afghanistan      Asia  1987  40.822 13867957  852.3959
+    ##  9 Afghanistan      Asia  1992  41.674 16317921  649.3414
+    ## 10 Afghanistan      Asia  1997  41.763 22227415  635.3414
+    ## # ... with 1,406 more rows
+
+Next I wanted to explore semi\_join.
+
+``` r
+gapminder %>% 
+  semi_join(nato) 
+```
+
+    ## Joining, by = "country"
+
+    ## Warning: Column `country` joining factor and character vector, coercing
+    ## into character vector
+
+    ## # A tibble: 288 x 6
+    ##    country continent  year lifeExp     pop gdpPercap
+    ##     <fctr>    <fctr> <int>   <dbl>   <int>     <dbl>
+    ##  1 Albania    Europe  1952  55.230 1282697  1601.056
+    ##  2 Albania    Europe  1957  59.280 1476505  1942.284
+    ##  3 Albania    Europe  1962  64.820 1728137  2312.889
+    ##  4 Albania    Europe  1967  66.220 1984060  2760.197
+    ##  5 Albania    Europe  1972  67.690 2263554  3313.422
+    ##  6 Albania    Europe  1977  68.930 2509048  3533.004
+    ##  7 Albania    Europe  1982  70.420 2780097  3630.881
+    ##  8 Albania    Europe  1987  72.000 3075321  3738.933
+    ##  9 Albania    Europe  1992  71.581 3326498  2497.438
+    ## 10 Albania    Europe  1997  72.950 3428038  3193.055
+    ## # ... with 278 more rows
+
+Semi\_join returns all rows from x where there are matching values in y, keeping just columns from x. This appears to do the exact same thing as inner\_join for this dataset this is because there are no multiple matches between these datasets.
+
+Now that I've gone through the major functions, I wanted to see about joinging by year to better see the difference between semi\_join and inner\_join. So I first created a new variable in nato database with the year named the same as the gapminder variable.
+
+``` r
+natoRename <- nato
+colnames(natoRename)[colnames(natoRename)=="natyear"] <- "year"
+```
+
+First is the inner\_join funciton:
+
+``` r
+gapminder %>% 
+  inner_join(natoRename, by ="year") 
+```
+
+    ## # A tibble: 426 x 7
+    ##      country.x continent  year lifeExp      pop gdpPercap country.y
+    ##         <fctr>    <fctr> <int>   <dbl>    <int>     <dbl>     <chr>
+    ##  1 Afghanistan      Asia  1952  28.801  8425333  779.4453    Greece
+    ##  2 Afghanistan      Asia  1952  28.801  8425333  779.4453    Turkey
+    ##  3 Afghanistan      Asia  1982  39.854 12881816  978.0114     Spain
+    ##  4     Albania    Europe  1952  55.230  1282697 1601.0561    Greece
+    ##  5     Albania    Europe  1952  55.230  1282697 1601.0561    Turkey
+    ##  6     Albania    Europe  1982  70.420  2780097 3630.8807     Spain
+    ##  7     Algeria    Africa  1952  43.077  9279525 2449.0082    Greece
+    ##  8     Algeria    Africa  1952  43.077  9279525 2449.0082    Turkey
+    ##  9     Algeria    Africa  1982  61.368 20033753 5745.1602     Spain
+    ## 10      Angola    Africa  1952  30.015  4232095 3520.6103    Greece
+    ## # ... with 416 more rows
+
+This returns all the data for each country for the years that have a data point in the Nato dataset.
+
+Next is the semi\_join funciton:
+
+``` r
+gapminder %>% 
+  semi_join(natoRename, by ="year") 
+```
+
+    ## # A tibble: 284 x 6
+    ##        country continent  year lifeExp      pop gdpPercap
+    ##         <fctr>    <fctr> <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan      Asia  1952  28.801  8425333  779.4453
+    ##  2 Afghanistan      Asia  1982  39.854 12881816  978.0114
+    ##  3     Albania    Europe  1952  55.230  1282697 1601.0561
+    ##  4     Albania    Europe  1982  70.420  2780097 3630.8807
+    ##  5     Algeria    Africa  1952  43.077  9279525 2449.0082
+    ##  6     Algeria    Africa  1982  61.368 20033753 5745.1602
+    ##  7      Angola    Africa  1952  30.015  4232095 3520.6103
+    ##  8      Angola    Africa  1982  39.942  7016384 2756.9537
+    ##  9   Argentina  Americas  1952  62.485 17876956 5911.3151
+    ## 10   Argentina  Americas  1982  69.942 29341374 8997.8974
+    ## # ... with 274 more rows
+
+This returns the data for each country for the years that have a data point in the Nato dataset but removes multiple matches.
+
+This last part was more just for fun since the year variable in the gapminder dataset means something totally different than the one in the nato dataset.
+
 Activity \#3
 ------------
+
+First to compare `merge()` with the dplyr joins.
+
+match

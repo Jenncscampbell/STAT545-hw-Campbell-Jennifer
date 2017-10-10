@@ -130,10 +130,71 @@ nato <-read_csv("natocountries.csv")
 kable(nato)
 ```
 
+-Explore the different types of joins:
 
 
 
+1. First I decided to explore the lef_join function
+```{r}
+gapminder %>% 
+  left_join(nato) 
+```
+
+The left join still returns all rows and columns from the gapminder set so we have a bunch of NAs for all the countries that never joined NATO. 
+
+Now say I wanted only the NATO countries. Then I would use `inner_join` to only return the data for countries that are in my NATO data set. 
+
+```{r}
+gapminder %>% 
+  inner_join(nato) 
+```
+
+Next I wanted to do the opposite and only see the data for the countries that are not in NATO: 
+```{r}
+gapminder %>% 
+  anti_join(nato) 
+```
 
 
+Next I wanted to explore semi_join. 
+
+```{r}
+gapminder %>% 
+  semi_join(nato) 
+```
+
+Semi_join returns all rows from x where there are matching values in y, keeping just columns from x. This appears to do the exact same thing as inner_join for this dataset this is because there are no multiple matches between these datasets.
+
+Now that I've gone through the major functions, I wanted to see about joinging by year to better see the difference between semi_join and inner_join. So I first created a new variable in nato database with the year named the same as the gapminder variable. 
+
+```{r}
+natoRename <- nato
+colnames(natoRename)[colnames(natoRename)=="natyear"] <- "year"
+```
+ 
+First is the inner_join funciton: 
+
+```{r}
+gapminder %>% 
+  inner_join(natoRename, by ="year") 
+```
+This returns all the data for each country for the years that have a data point in the Nato dataset. 
+
+
+Next is the semi_join funciton: 
+
+```{r}
+gapminder %>% 
+  semi_join(natoRename, by ="year") 
+```
+This returns the data for each country for the years that have a data point in the Nato dataset but removes multiple matches. 
+
+This last part was more just for fun since the year variable in the gapminder dataset means something totally different than the one in the nato dataset. 
 
 ## Activity #3
+
+First to compare `merge()` with the dplyr joins. 
+
+
+
+match
