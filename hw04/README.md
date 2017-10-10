@@ -10,4 +10,4 @@ This [file](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/
 ## Progress Report
 Reshaping the data: 
 1. Reshaping the data was really easy. I did get a bit confused at first when I mixed up the variables in the `spread` function but I learned through trial and error. 
-2. At first glance at the data format I'm not sure how you would plot this. I finally found something that works. In my coding for the plot I originally had put `ggplot(aes(x = year, y=lifeExp ))` shockingly this still worked even though lifeExp had not been piped. I think because I had put new y variables in for the following lines that this over wrote my mistake. 
+2. At first glance at the data format I'm not sure how you would plot this. I finally found something that works. In my coding for the plot I originally had put `ggplot(aes(x = year, y=lifeExp ))` shockingly this still worked even though lifeExp had not been piped. I think because I had put new y variables in for the following lines that this over wrote my mistake.
