@@ -4,3 +4,6 @@
 
 
 ##### [Here is the link to my HW3 folder](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/tree/master/hw03)
+
+
+##### [Here is the link to my HW4 folder](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/tree/master/hw04)
