@@ -1,0 +1,84 @@
+---
+title: "hw4"
+output: github_document
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(gapminder)
+library(tidyverse)
+library(knitr)
+library(ggthemes)
+library(reshape2)
+```
+
+
+## Activity #3
+
+1. Compute the mean  life expectancy for all possible combinations of continent and year. 
+
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp))
+```
+2. Reshape that to have one row per continent and one variable per year.
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(year, Mean_lifeExp)
+```
+
+This actually looks really ugly so I think I'll do it by one row per year and one variable for each continent. 
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(continent, Mean_lifeExp)
+```
+
+3. Use knitr::kable() to make these tables look pretty in your rendered homework.
+
+```{r}
+kable(gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(continent, Mean_lifeExp))
+```
+
+4. Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect.
+I don't really know how you would graph all of this on to one graph. It is easy to say do year and the mean life expectancy for one continent, like here I did it for Africa. I had to change the axis names since it defaulted to just say Africa (our column title) which is really uninformative. 
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(continent, Mean_lifeExp) %>% 
+  ggplot(aes(x = year,y = Africa)) + 
+  geom_point() +
+  geom_smooth(alpha=0.5) + 
+  labs(x="Year", 
+          y="Mean Life Expectancy",
+          title="Mean Life Expectancy Africa Over Time")
+
+```
+
+I did realize that one cool thing that you can do with this is plot countries life expectancies against each other. But I'm not sure that it is easy for readers to interpret since this is data by year but the graph in now way tells you that
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(continent, Mean_lifeExp) %>% 
+  ggplot(aes(x = Asia,y = Africa)) + 
+  geom_point() +
+  geom_smooth(alpha=0.5) + 
+  labs(x="Mean life expectancy of Asia", 
+          y="Mean Life Expectancy of Africa",
+          title="Mean Life Expectancy of Asia and Africa")
+
+```
+
