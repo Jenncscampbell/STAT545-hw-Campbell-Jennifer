@@ -153,19 +153,22 @@ gapminder %>%
 
 ![](hw4_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
 
-Finally, to get it all on a single
+Finally, to get it all on a single I resorted to adding a geom\_point for each continent. It is really inefficient coding. I feel like this really only works because there are only five continents, if there were more then this would be a nightmare.
 
 ``` r
 gapminder %>% 
   group_by(continent, year) %>% 
   summarize(Mean_lifeExp=mean(lifeExp)) %>% 
   spread(continent, Mean_lifeExp) %>% 
-  ggplot(aes(x = year,y = lifeExp)) + 
+  ggplot(aes(x = year )) + 
   geom_point(aes(y = Asia, colour ="Asia")) +
   geom_point(aes(y = Europe, colour ="Europe")) +
   geom_point(aes(y = Africa, colour ="Africa")) +
   geom_point(aes(y = Oceania, colour ="Oceania")) +
-  geom_point(aes(y = Americas, colour ="Americas")) 
+  geom_point(aes(y = Americas, colour ="Americas")) +
+  labs(x="Year", 
+          y="Mean Life Expectancy",
+          title="Mean Life Expectancy Across Time")
 ```
 
 ![](hw4_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
