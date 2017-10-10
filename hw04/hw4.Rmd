@@ -82,6 +82,7 @@ gapminder %>%
           title="Mean Life Expectancy of Asia and Africa")
 
 ```
+
 I then remembered that I could convey the years by color though. At least that is a less misleading graph. 
 
 ```{r}
@@ -195,6 +196,21 @@ This last part was more just for fun since the year variable in the gapminder da
 
 First to compare `merge()` with the dplyr joins. 
 
+```{r}
+merge(gapminder, nato)
+```
 
+This seems to function the same as the inner_join so it only keeps the gapminder data for which there is a data point in the nato frame- so only data for the countries in NATO.
 
-match
+Now to explore `match()` function: 
+
+```{r}
+match(gapminder, nato)
+```
+This first one returns a vector of NAs. This would normally mean that nothing matches. To verify, I then ran a match with my two nato datasets which I know are identical except for a variable name.
+
+```{r}
+match(nato, natoRename)
+```
+
+Here we get an output of 1 and 2 meaning that natoRename matches positions 1 and 2 of nato. 

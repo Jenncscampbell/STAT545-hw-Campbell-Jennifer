@@ -14,4 +14,7 @@ Reshaping the data:
 
 
 Join, merge, look up
-1. I first had issues here because I created a data file (.csv) and imported it into my R but then my knitr wouldn't work because it couldn't find my data. After googling I realized that I need to upload my data to github and then have a `read_csv` line in r. 
+1. I first had issues here because I created a data file (.csv) and imported it into my R but then my knitr wouldn't work because it couldn't find my data. After googling I realized that I need to upload my data to github and then have a `read_csv` line in r. Otherwise this was pretty straight forward. I did notice that in my case the `inner_join` and `semi_join` were returning the same values since there were no multiples. So then I decided to join by year just for fun. This finally returned different datasets for `inner_join` and `semi_join`. But since the year factors mean different things, it is totally uninterpretable. 
+
+Bonus comparisons: 
+The `merge` was as expected. But the `match` function yeilded interesting results. When I performed match for gapminder and nato dataset, it returned a vector of NAs equal to the number of variables in gapminder. But when I performed a match for nato and natoRenamed (only a variable renamed here), it returned a vector with 1 and 2. I had to google this to figure out what it means. It doesn't seem like it is a very different funciton than join/merge, because it is really just a check for anything that matches. 
