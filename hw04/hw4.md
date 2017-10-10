@@ -184,5 +184,51 @@ Activity \#1
 
 Create a second data frame, complementary to Gapminder. - I created a Nato country dataset which included two variables: country and natyear (year the country joined Nato)
 
+``` r
+nato <-read_csv("natocountries.csv")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   country = col_character(),
+    ##   natyear = col_integer()
+    ## )
+
+``` r
+kable(nato)
+```
+
+| country        |  natyear|
+|:---------------|--------:|
+| Belgium        |     1949|
+| Canada         |     1949|
+| Denmark        |     1949|
+| France         |     1949|
+| Iceland        |     1949|
+| Italy          |     1949|
+| Luxembourg     |     1949|
+| Netherlands    |     1949|
+| Norway         |     1949|
+| Portugal       |     1949|
+| United Kingdom |     1949|
+| United States  |     1949|
+| Greece         |     1952|
+| Turkey         |     1952|
+| Germany        |     1955|
+| Spain          |     1982|
+| Czech Republic |     1999|
+| Hungary        |     1999|
+| Poland         |     1999|
+| Bulgaria       |     2004|
+| Estonia        |     2004|
+| Latvia         |     2004|
+| Lithuania      |     2004|
+| Romania        |     2004|
+| Slovakia       |     2004|
+| Slovenia       |     2004|
+| Albania        |     2009|
+| Croatia        |     2009|
+| Montenegro     |     2017|
+
 Activity \#3
 ------------

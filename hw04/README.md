@@ -14,4 +14,4 @@ Reshaping the data:
 
 
 Join, merge, look up
-1. I first had issues here because I created a data file (.csv) and imported it into my R but then my knitr wouldn't work because it couldn't find my data. 
+1. I first had issues here because I created a data file (.csv) and imported it into my R but then my knitr wouldn't work because it couldn't find my data. After googling I realized that I need to upload my data to github and then have a `read_csv` line in r. 

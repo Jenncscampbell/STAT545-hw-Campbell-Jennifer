@@ -125,6 +125,10 @@ gapminder %>%
 Create a second data frame, complementary to Gapminder.
 - I created a Nato country dataset which included two variables: country and natyear  (year the country joined Nato)
 
+```{r}
+nato <-read_csv("natocountries.csv")
+kable(nato)
+```
 
 
 
