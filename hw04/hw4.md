@@ -98,7 +98,7 @@ kable(gapminder %>%
 |  2002|  53.32523|  72.42204|  69.23388|  76.70060|  79.7400|
 |  2007|  54.80604|  73.60812|  70.72848|  77.64860|  80.7195|
 
-1.  Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect. I don't really know how you would graph all of this on to one graph. It is easy to say do year and the mean life expectancy for one continent, like here I did it for Africa. I had to change the axis names since it defaulted to just say Africa (our column title) which is really uninformative.
+1.  Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect. It is not immediately inutitive how to plot this all on one graph. It is easy to say do year and the mean life expectancy for one continent, like here I did it for Africa. I had to change the axis names since it defaulted to just say Africa (our column title) which is really uninformative.
 
 ``` r
 gapminder %>% 
@@ -153,4 +153,19 @@ gapminder %>%
 
 ![](hw4_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
 
-I really couldn't figure out how to add more continents to the plot when they are listed as their own variables and still create a legible, interpretable graph. I could have added other visual factors to add continents (for example a color by Europe) but then on a graph it is really confusing.
+Finally, to get it all on a single
+
+``` r
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarize(Mean_lifeExp=mean(lifeExp)) %>% 
+  spread(continent, Mean_lifeExp) %>% 
+  ggplot(aes(x = year,y = lifeExp)) + 
+  geom_point(aes(y = Asia, colour ="Asia")) +
+  geom_point(aes(y = Europe, colour ="Europe")) +
+  geom_point(aes(y = Africa, colour ="Africa")) +
+  geom_point(aes(y = Oceania, colour ="Oceania")) +
+  geom_point(aes(y = Americas, colour ="Americas")) 
+```
+
+![](hw4_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
