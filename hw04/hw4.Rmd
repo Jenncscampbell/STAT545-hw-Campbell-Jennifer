@@ -15,7 +15,7 @@ library(reshape2)
 
 ## Activity #3
 
-1. Compute the mean  life expectancy for all possible combinations of continent and year. 
+####1. Compute the mean  life expectancy for all possible combinations of continent and year. 
 
 
 ```{r}
@@ -23,7 +23,8 @@ gapminder %>%
   group_by(continent, year) %>% 
   summarize(Mean_lifeExp=mean(lifeExp))
 ```
-2. Reshape that to have one row per continent and one variable per year.
+
+####2. Reshape that to have one row per continent and one variable per year.
 
 ```{r}
 gapminder %>% 
@@ -32,7 +33,7 @@ gapminder %>%
   spread(year, Mean_lifeExp)
 ```
 
-This actually looks really ugly so I think I'll do it by one row per year and one variable for each continent. 
+####3.This actually looks really ugly so I think I'll do it by one row per year and one variable for each continent. 
 
 ```{r}
 gapminder %>% 
@@ -41,7 +42,7 @@ gapminder %>%
   spread(continent, Mean_lifeExp)
 ```
 
-3. Use knitr::kable() to make these tables look pretty in your rendered homework.
+####4.Use knitr::kable() to make these tables look pretty in your rendered homework.
 
 ```{r}
 kable(gapminder %>% 
@@ -50,7 +51,7 @@ kable(gapminder %>%
   spread(continent, Mean_lifeExp))
 ```
 
-4. Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect.
+Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect.
 It is not immediately inutitive how to plot this all on one graph. It is easy to say do year and the mean life expectancy for one continent, like here I did it for Africa. I had to change the axis names since it defaulted to just say Africa (our column title) which is really uninformative. 
 
 ```{r}
@@ -146,22 +147,22 @@ The left join still returns all rows and columns from the gapminder set so we ha
 Now say I wanted only the NATO countries. Then I would use `inner_join` to only return the data for countries that are in my NATO data set. 
 
 ```{r}
-gapminder %>% 
-  inner_join(nato) 
+kable(gapminder %>% 
+  inner_join(nato))
 ```
 
 Next I wanted to do the opposite and only see the data for the countries that are not in NATO: 
 ```{r}
-gapminder %>% 
-  anti_join(nato) 
+kable(gapminder %>% 
+  anti_join(nato))
 ```
 
 
 Next I wanted to explore semi_join. 
 
 ```{r}
-gapminder %>% 
-  semi_join(nato) 
+kable(gapminder %>% 
+  semi_join(nato))
 ```
 
 Semi_join returns all rows from x where there are matching values in y, keeping just columns from x. This appears to do the exact same thing as inner_join for this dataset this is because there are no multiple matches between these datasets.
@@ -185,8 +186,8 @@ This returns all the data for each country for the years that have a data point 
 Next is the semi_join funciton: 
 
 ```{r}
-gapminder %>% 
-  semi_join(natoRename, by ="year") 
+kable(gapminder %>% 
+  semi_join(natoRename, by ="year"))
 ```
 This returns the data for each country for the years that have a data point in the Nato dataset but removes multiple matches. 
 
@@ -197,7 +198,7 @@ This last part was more just for fun since the year variable in the gapminder da
 First to compare `merge()` with the dplyr joins. 
 
 ```{r}
-merge(gapminder, nato)
+kable(merge(gapminder, nato))
 ```
 
 This seems to function the same as the inner_join so it only keeps the gapminder data for which there is a data point in the nato frame- so only data for the countries in NATO.
