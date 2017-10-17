@@ -14,6 +14,6 @@ But [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/m
 
 **Factorize.** Transform some of the variable in the `singer_locations` dataframe into factors: pay attention at what levels you introduce and their order. Try and consider the difference between the base R `as.factor` and the `forcats`-provided functions.
 
-This part was a bit tricky. I was getting errors from my factoring code. After asking google, it seems that the base r factoring pack struggles with na values. I tried to remove my na values but ran into some issues, after talking with my ta ------ I decided to use the `forcats` pack instead since that won't reorder our variables and so is a bit better. 
+This part was a bit tricky. I was getting errors from my factoring code. After asking google, it seems that the base r factoring pack struggles with na values. I then removed the NA values and it all seemed to work fine after that. I decided to use the `forcats` pack also to see if there were order differences in this case it all seems the same. But since `forcats` wont change the order this seems safer. 
 
 
