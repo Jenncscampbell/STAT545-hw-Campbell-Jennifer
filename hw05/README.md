@@ -10,8 +10,8 @@ But [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/m
 
 ## Progress Report
 
-## Factor Management
+### Factor Management
 
-### Factorize
+#### Factorize
 
 
