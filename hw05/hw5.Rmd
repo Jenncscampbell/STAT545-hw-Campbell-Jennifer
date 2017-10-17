@@ -35,6 +35,9 @@ First I tried to factorize city with the but that didn't work. This seems to be 
 
 >Output: Error in mutate_impl(.data, dots) : Evaluation error: `idx` must contain one integer for each level of `f`.
 
+
+
+
 I could remove the NA but instead I'll just use `forcats` since we probably don't want to be reordering our factor anyway - as what the base r funciton would have. 
 ```{r}
 sl_fac <- singer_locations %>% 
