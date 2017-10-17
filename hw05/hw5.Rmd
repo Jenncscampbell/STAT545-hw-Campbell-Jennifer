@@ -1,0 +1,19 @@
+---
+title: "Homework 5"
+output: github_document
+---
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(gapminder)
+library(tidyverse)
+library(knitr)
+library(ggthemes)
+library(reshape2)
+```
+
+I decided to work with the singer dataset for a change :smile:
+
+## Factor Management
+
+### Factorize
