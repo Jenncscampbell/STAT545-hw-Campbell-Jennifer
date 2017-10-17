@@ -158,7 +158,7 @@ gapminder %>%
 
 ![](hw4_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-8-1.png)
 
-Finally, to get it all on a single I resorted to adding a geom\_point for each continent. It is really inefficient coding. I feel like this really only works because there are only five continents, if there were more then this would be a nightmare.
+Finally, to get it all on a single I resorted to adding a geom\_point for each continent. It is really inefficient coding. I feel like this really only works because there are only five continents, if there were more then this would be a nightmare. It's a lot easier to work with the data before spreading to show this same data.
 
 ``` r
 gapminder %>% 
