@@ -17,3 +17,4 @@ But [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/m
 This part was a bit tricky. I was getting errors from my factoring code. After asking google, it seems that the base r factoring pack struggles with na values. I then removed the NA values and it all seemed to work fine after that. I decided to use the `forcats` pack also to see if there were order differences in this case it all seems the same. But since `forcats` wont change the order this seems safer. 
 
 
+**Drop 0.** This part was easy except for when I tried to filter out mulitple values at once. I tried a number of form for sytax and ran into errors on each attempt. I eventually just decided to write a line for each separate one even though this is very inefficient. 
