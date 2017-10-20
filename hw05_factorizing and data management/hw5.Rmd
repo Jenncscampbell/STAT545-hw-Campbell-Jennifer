@@ -14,6 +14,7 @@ library(reshape2)
 library(dplyr)
 library(ggplot2)
 library(forcats)
+library(gdata)
 ```
 
 I decided to work with the singer dataset for a change :smile:
@@ -28,7 +29,7 @@ data("singer_locations")
 kable(head(singer_locations))
 ```
 
-First I tried to factorize city with the but that didn't work. This seems to be due to the existance of NA values. (Here I presented the code as a block quote since knitr wont render a file with code errors.)
+First I tried to factorize city with the `as_factor` used in class (cm012) but that didn't work. This seems to be due to the existance of NA values. (Here I presented the code as a block quote since knitr wont render a file with code errors.)
 
 > sl_fac <-singer_locations %>% 
   mutate(city_factor = as_factor(city))
@@ -46,13 +47,21 @@ kable(head(singer_locations %>%
   mutate(city_factor = as_factor(city)) ))
 ```
 
-
-Before deciding to remove NA's I'll just use `forcats` since we probably don't want to be reordering our factor anyway. 
+Alternatively, base R also comes with `as.factor`: 
 ```{r}
-sl_fac <- singer_locations %>% 
-  mutate(city_factor = factor(city))
-kable(head(sl_fac))
+sl_facB <- singer_locations %>% 
+  mutate(city_factor = as.factor(city)) 
+kable(head(sl_facB))
 ```
+
+A third way is to just use `forcats`. This is often advised since we probably don't want to be reordering our factor which can happen with the base r versions. 
+```{r}
+sl_facF <- singer_locations %>% 
+  mutate(city_factor = factor(city))
+kable(head(sl_facF))
+```
+
+All of these ways to factor appear to give the same results for our dataset so it probaly doesn't matter which one we go with here. 
 
 **Drop 0.** Filter the `singer_locations` data to remove observations associated with the uncorrectly inputed `year` 0. Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
 
@@ -60,20 +69,20 @@ First I removed any data with the year 0:
 Prior to removal there were 10100 observations 
 
 ```{r}
-str(sl_fac)
+str(sl_facF)
 ```
- But after there were only 1000 observations
+ Now with removal 
 ```{r}
-filter(sl_fac, year != "0") %>% 
-    str(sl_fac)
+filter(sl_facF, year != "0") %>% 
+    str(sl_facF)
 ```
-
+But after there were only 1000 observations
 
 Then I removed any unused factor levels-  NA values for `city_factor`.
 ```{r}
-sl_fac %>% 
+sl_facF %>% 
     filter(!is.na(city)) %>% 
-  str(sl_fac)
+  str(sl_facF)
 ```
 
 Now there are only 4129 observations but with 1316 factor levels for city_factor. 
@@ -81,7 +90,7 @@ Now there are only 4129 observations but with 1316 factor levels for city_factor
 In examining the data though there are a few odd factors like "?, Illinois, 020, 27, 310 Lousiana, 732 New Jersey" I decided to remove these as well. 
 
 ```{r}
-sl_new <- (sl_fac %>% 
+sl_new <- (sl_facF %>% 
 filter( city_factor != "?, Illinois")  %>% 
   filter( city_factor != "020") %>% 
   filter( city_factor != "310, Louisiana") %>% 
@@ -97,5 +106,19 @@ filter(city_factor == "?, Illinois")
 ```
 
 It did indead remove the value but I guess it still remembers it as a factor that did exist at one point. 
+
+This was the first bit of code I found:
+```{r}
+sl_new2 <-(droplevels(sl_new)$city_factor)
+str(sl_new2)
+```
+Okay, this code just created a new table but got rid of all my other data... 
+
+I found on [R-bloggers](https://www.r-bloggers.com/r-drop-factor-levels-in-a-dataset/) advice to use `gdata` package to remove factor levels while retaining your other data. This seems to have worked. 
+```{r}
+sl_new3 <- drop.levels(sl_new) 
+str(sl_new3)
+```
+
 
 **Reorder the levels of `year`, `artist_name` or `title`.** Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
