@@ -221,3 +221,27 @@ City_hotnessCSV <-read_csv("City_hotness.csv")
 kable(head(City_hotnessCSV))
 ```
 
+CSV formatting seems to have maintained our previous ordering of city by artist hotttnesss. 
+
+Next I tried RDS
+```{r}
+saveRDS(City_hotness, "City_hotness.csv")
+City_hotnessRDS <-readRDS("City_hotness.csv")
+kable(head(City_hotnessRDS))
+```
+
+RDS also seems fine with retaining our ordering of city. 
+
+Now to try dput: which also seems fine
+```{r}
+dput(City_hotness, "City_hotness")
+City_hotnessDput <-dget("City_hotness")
+kable(head(City_hotness))
+```
+
+Next I tried deliminated: where our data seemed to fall apart: 
+```{r}
+write_delim(City_hotness, "City_hotness")
+City_hotnessDelim <-read.delim("City_hotness")
+(head(City_hotnessDelim))
+```

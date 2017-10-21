@@ -413,3 +413,57 @@ kable(head(City_hotnessCSV))
 | TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks                          | ARCENE01187B9AF929 | Barleyjuice                                 |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|   -77.60454| Barleyjuice              | Pennsylvania | Pennsylvania |
 | TRWKTVW12903CE5ACF | Indian Deli           | SOGYBYQ12AB0188586 | Beat Konducta Vol. 3 & 4: In India | AR17D2T1187FB4DBC2 | Madlib                                      |  2007|  107.7808|           0.5339732|            0.7640263|  34.20034|  -119.18044| Madlib                   | Oxnard, CA   | Oxnard, CA   |
 | TRUWFXF128E0795D22 | Miss Gorgeous         | SOTEIQB12A6702048D | Music Monks                        | ARDNZL61187B98F42D | Seeed's Pharaoh Riddim Feat. General Degree |  2003|  195.9702|           0.4800612|            0.3086738|  50.73230|     7.10169| Seeed feat. Elephant Man | Bonn         | Bonn         |
+
+CSV formatting seems to have maintained our previous ordering of city by artist hotttnesss.
+
+Next I tried RDS
+
+``` r
+saveRDS(City_hotness, "City_hotness.csv")
+City_hotnessRDS <-readRDS("City_hotness.csv")
+kable(head(City_hotnessRDS))
+```
+
+| track\_id          | title                 | song\_id           | release                            | artist\_id         | artist\_name                                |  year|  duration|  artist\_hotttnesss|  artist\_familiarity|  latitude|   longitude| name                     | city         | city\_factor |
+|:-------------------|:----------------------|:-------------------|:-----------------------------------|:-------------------|:--------------------------------------------|-----:|---------:|-------------------:|--------------------:|---------:|-----------:|:-------------------------|:-------------|:-------------|
+| TRXJANY128F42246FC | Lonely Island         | SODESQP12A6D4F98EF | The Duke Of Earl                   | ARYBUAO1187FB3F4EB | Gene Chandler                               |  2004|  106.5530|           0.3937627|            0.5700167|  41.88415|   -87.63241| Gene Chandler            | Chicago, IL  | Chicago, IL  |
+| TRIKPCA128F424A553 | Here's That Rainy Day | SOQUYQD12A8C131619 | Imprompture                        | AR4111G1187B9B58AB | Paul Horn                                   |  1998|  527.5947|           0.4306226|            0.5039940|  40.71455|   -74.00712| Paul Horn                | New York, NY | New York, NY |
+| TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping                       | AR75GYU1187B9AE47A | Dorothy Ashby                               |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|   -83.04792| Dorothy Ashby            | Detroit, MI  | Detroit, MI  |
+| TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks                          | ARCENE01187B9AF929 | Barleyjuice                                 |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|   -77.60454| Barleyjuice              | Pennsylvania | Pennsylvania |
+| TRWKTVW12903CE5ACF | Indian Deli           | SOGYBYQ12AB0188586 | Beat Konducta Vol. 3 & 4: In India | AR17D2T1187FB4DBC2 | Madlib                                      |  2007|  107.7808|           0.5339732|            0.7640263|  34.20034|  -119.18044| Madlib                   | Oxnard, CA   | Oxnard, CA   |
+| TRUWFXF128E0795D22 | Miss Gorgeous         | SOTEIQB12A6702048D | Music Monks                        | ARDNZL61187B98F42D | Seeed's Pharaoh Riddim Feat. General Degree |  2003|  195.9702|           0.4800612|            0.3086738|  50.73230|     7.10169| Seeed feat. Elephant Man | Bonn         | Bonn         |
+
+RDS also seems fine with retaining our ordering of city.
+
+Now to try dput: which also seems fine
+
+``` r
+dput(City_hotness, "City_hotness")
+City_hotnessDput <-dget("City_hotness")
+kable(head(City_hotness))
+```
+
+| track\_id          | title                 | song\_id           | release                            | artist\_id         | artist\_name                                |  year|  duration|  artist\_hotttnesss|  artist\_familiarity|  latitude|   longitude| name                     | city         | city\_factor |
+|:-------------------|:----------------------|:-------------------|:-----------------------------------|:-------------------|:--------------------------------------------|-----:|---------:|-------------------:|--------------------:|---------:|-----------:|:-------------------------|:-------------|:-------------|
+| TRXJANY128F42246FC | Lonely Island         | SODESQP12A6D4F98EF | The Duke Of Earl                   | ARYBUAO1187FB3F4EB | Gene Chandler                               |  2004|  106.5530|           0.3937627|            0.5700167|  41.88415|   -87.63241| Gene Chandler            | Chicago, IL  | Chicago, IL  |
+| TRIKPCA128F424A553 | Here's That Rainy Day | SOQUYQD12A8C131619 | Imprompture                        | AR4111G1187B9B58AB | Paul Horn                                   |  1998|  527.5947|           0.4306226|            0.5039940|  40.71455|   -74.00712| Paul Horn                | New York, NY | New York, NY |
+| TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping                       | AR75GYU1187B9AE47A | Dorothy Ashby                               |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|   -83.04792| Dorothy Ashby            | Detroit, MI  | Detroit, MI  |
+| TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks                          | ARCENE01187B9AF929 | Barleyjuice                                 |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|   -77.60454| Barleyjuice              | Pennsylvania | Pennsylvania |
+| TRWKTVW12903CE5ACF | Indian Deli           | SOGYBYQ12AB0188586 | Beat Konducta Vol. 3 & 4: In India | AR17D2T1187FB4DBC2 | Madlib                                      |  2007|  107.7808|           0.5339732|            0.7640263|  34.20034|  -119.18044| Madlib                   | Oxnard, CA   | Oxnard, CA   |
+| TRUWFXF128E0795D22 | Miss Gorgeous         | SOTEIQB12A6702048D | Music Monks                        | ARDNZL61187B98F42D | Seeed's Pharaoh Riddim Feat. General Degree |  2003|  195.9702|           0.4800612|            0.3086738|  50.73230|     7.10169| Seeed feat. Elephant Man | Bonn         | Bonn         |
+
+Next I tried deliminated: where our data seemed to fall apart:
+
+``` r
+write_delim(City_hotness, "City_hotness")
+City_hotnessDelim <-read.delim("City_hotness")
+(head(City_hotnessDelim))
+```
+
+    ##                                                                                 track_id.title.song_id.release.artist_id.artist_name.year.duration.artist_hotttnesss.artist_familiarity.latitude.longitude.name.city.city_factor
+    ## 1                    TRXJANY128F42246FC Lonely Island SODESQP12A6D4F98EF The Duke Of Earl ARYBUAO1187FB3F4EB Gene Chandler 2004 106.55302 0.393762698987 0.570016702885 41.88415 -87.63241 Gene Chandler Chicago, IL Chicago, IL
+    ## 2                       TRIKPCA128F424A553 Here's That Rainy Day SOQUYQD12A8C131619 Imprompture AR4111G1187B9B58AB Paul Horn 1998 527.59465 0.430622621858 0.503993974931 40.71455 -74.00712 Paul Horn New York, NY New York, NY
+    ## 3                                  TRBYYXH128F4264585 Games SOPIOCP12A8C13A322 Afro-Harping AR75GYU1187B9AE47A Dorothy Ashby 1968 237.322 0.410752048849 0.530346783927 42.33168 -83.04792 Dorothy Ashby Detroit, MI Detroit, MI
+    ## 4                                  TRKFFKR128F9303AE3 More Pipes SOHQSPY12AB0181325 Six Yanks ARCENE01187B9AF929 Barleyjuice 2006 192.93995 0.3762635263 0.541295002234 40.99471 -77.60454 Barleyjuice Pennsylvania Pennsylvania
+    ## 5                   TRWKTVW12903CE5ACF Indian Deli SOGYBYQ12AB0188586 Beat Konducta Vol. 3 & 4: In India AR17D2T1187FB4DBC2 Madlib 2007 107.78077 0.533973158094 0.764026335274 34.20034 -119.18044 Madlib Oxnard, CA Oxnard, CA
+    ## 6 TRUWFXF128E0795D22 Miss Gorgeous SOTEIQB12A6702048D Music Monks ARDNZL61187B98F42D Seeed's Pharaoh Riddim Feat. General Degree 2003 195.97016 0.480061156343 0.308673846767 50.7323 7.10169 Seeed feat. Elephant Man Bonn Bonn
