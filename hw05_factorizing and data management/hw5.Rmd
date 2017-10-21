@@ -367,15 +367,25 @@ plot6
 
 This seems to deal with the crowding a bit better and reveals the large crowding of data around probably London. 
 
+```{r}
+plot7 <- plot6 +   geom_text(data=subset(singer_locations, city %in% c("London, UK")), 
+         aes(x=longitude, y=latitude, label=city), vjust=-5.5, hjust=.7)
+plot7
+```
 
 **Writing figures to file**
 
 ```{r}
 ggsave("Artist_Familiarity_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot3)
 
-ggsave("Artist_Hotttness_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot6)
+ggsave("Artist_Hotttness_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot7)
 ```
 
 
 Writing plots to files can be good for you to link say a plot of artitist familiarity [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_by_Location.pdf) or the one for artist hotttness [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Hotttness_by_Location.pdf)
+
+
+
+
+
 
