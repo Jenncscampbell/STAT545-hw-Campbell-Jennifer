@@ -271,27 +271,48 @@ str(sl_new3)
 
 I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only 1958. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
 
-``` r
-sl_small <- (sl_new3 %>% 
-  filter(year == 1958))
-sl_summary <- (sl_small %>% 
-                 filter(year == 1958) %>% 
-  mutate(artist_name_factor = factor(artist_name)) %>% 
-  group_by(artist_name_factor, song_id) %>% 
-  summarize(MaxDur=max(duration))) 
-sl_join <- left_join(sl_small, sl_summary)
-```
-
-    ## Joining, by = "song_id"
+This seems to have worked perfectly.
 
 ``` r
-sl_order <- (sl_join %>% 
-               mutate(artist_name_factor = fct_reorder(artist_name_factor, MaxDur )))
+sl_small2 <- (sl_new3 %>% 
+  filter(year <= 1958))
+sl_summary2 <- (sl_small2 %>% 
+  group_by(artist_name) %>% 
+  summarize(MaxDur=max(duration))) %>% 
+  mutate(artist_name_factor = factor(artist_name)) 
+sl_order <- (sl_summary2 %>% 
+  mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)))
 levels(sl_order$artist_name_factor)
 ```
 
-    ## [1] "Duane Eddy"          "Allen Toussaint"     "The Chantels"       
-    ## [4] "Jimmy McCracklin"    "Jackie Wilson"       "Cannonball Adderley"
-    ## [7] "JOHN COLTRANE"
-
-This seems to have worked perfectly.
+    ##  [1] "Tom Lehrer"                                   
+    ##  [2] "Webb Pierce"                                  
+    ##  [3] "Duane Eddy"                                   
+    ##  [4] "Allen Toussaint"                              
+    ##  [5] "Dale Hawkins"                                 
+    ##  [6] "The Four Lads"                                
+    ##  [7] "Oscar Brand"                                  
+    ##  [8] "Danny And The Juniors"                        
+    ##  [9] "Eddy Arnold"                                  
+    ## [10] "Jimmy Reed"                                   
+    ## [11] "Lonnie Johnson"                               
+    ## [12] "Jimmy McCracklin"                             
+    ## [13] "The Chantels"                                 
+    ## [14] "The Robins aka The Coasters"                  
+    ## [15] "Jackie Wilson"                                
+    ## [16] "Hank Williams"                                
+    ## [17] "The Stanley Brothers;The Clinch Mountain Boys"
+    ## [18] "Alberta Hunter"                               
+    ## [19] "Tex Williams"                                 
+    ## [20] "Sleepy John Estes"                            
+    ## [21] "Julie London"                                 
+    ## [22] "The Five Satins"                              
+    ## [23] "Roosevelt Sykes"                              
+    ## [24] "Blind Lemon Jefferson"                        
+    ## [25] "Elmore James"                                 
+    ## [26] "Dizzy Gillespie"                              
+    ## [27] "Cannonball Adderley"                          
+    ## [28] "Sonny Clark"                                  
+    ## [29] "Charles Mingus"                               
+    ## [30] "Art Blakey"                                   
+    ## [31] "JOHN COLTRANE"

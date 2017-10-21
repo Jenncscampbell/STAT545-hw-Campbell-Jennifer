@@ -125,22 +125,25 @@ str(sl_new3)
 
 I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only 1958. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
 
+This seems to have worked perfectly. 
+
 ```{r}
-sl_small <- (sl_new3 %>% 
-  filter(year == 1958))
-sl_summary <- (sl_small %>% 
-                 filter(year == 1958) %>% 
-  mutate(artist_name_factor = factor(artist_name)) %>% 
-  group_by(artist_name_factor, song_id) %>% 
-  summarize(MaxDur=max(duration))) 
-sl_join <- left_join(sl_small, sl_summary)
-sl_order <- (sl_join %>% 
-               mutate(artist_name_factor = fct_reorder(artist_name_factor, MaxDur )))
+sl_small2 <- (sl_new3 %>% 
+  filter(year <= 1958))
+sl_summary2 <- (sl_small2 %>% 
+  group_by(artist_name) %>% 
+  summarize(MaxDur=max(duration))) %>% 
+  mutate(artist_name_factor = factor(artist_name)) 
+sl_order <- (sl_summary2 %>% 
+  mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)))
 levels(sl_order$artist_name_factor)
 ```
 
 
-This seems to have worked perfectly. 
+
+```{r}
+
+```
 
 
 
