@@ -473,34 +473,56 @@ City_hotnessDelim <-read.delim("City_hotness")
 Here I decided to examine artist hotttnesss by year. After trying this plot the first time I realized that I needed to remove 0s from both these variables.
 
 ``` r
+singer_locations %>% 
+  summary()
+```
+
+    ##    track_id            title             song_id         
+    ##  Length:10100       Length:10100       Length:10100      
+    ##  Class :character   Class :character   Class :character  
+    ##  Mode  :character   Mode  :character   Mode  :character  
+    ##                                                          
+    ##                                                          
+    ##                                                          
+    ##                                                          
+    ##    release           artist_id         artist_name             year     
+    ##  Length:10100       Length:10100       Length:10100       Min.   :   0  
+    ##  Class :character   Class :character   Class :character   1st Qu.:1994  
+    ##  Mode  :character   Mode  :character   Mode  :character   Median :2002  
+    ##                                                           Mean   :1979  
+    ##                                                           3rd Qu.:2006  
+    ##                                                           Max.   :2010  
+    ##                                                                         
+    ##     duration         artist_hotttnesss artist_familiarity    latitude     
+    ##  Min.   :   0.6004   Min.   :0.0000    Min.   :0.0000     Min.   :-45.87  
+    ##  1st Qu.: 184.0518   1st Qu.:0.3644    1st Qu.:0.5164     1st Qu.: 35.15  
+    ##  Median : 231.3791   Median :0.4098    Median :0.5960     Median : 40.72  
+    ##  Mean   : 248.3994   Mean   :0.4149    Mean   :0.5976     Mean   : 40.05  
+    ##  3rd Qu.: 288.4567   3rd Qu.:0.4673    3rd Qu.:0.6781     3rd Qu.: 50.88  
+    ##  Max.   :2149.3285   Max.   :1.0213    Max.   :1.0000     Max.   : 69.65  
+    ##                                                           NA's   :5968    
+    ##    longitude            name               city          
+    ##  Min.   :-155.434   Length:10100       Length:10100      
+    ##  1st Qu.: -90.200   Class :character   Class :character  
+    ##  Median : -74.727   Mode  :character   Mode  :character  
+    ##  Mean   : -53.632                                        
+    ##  3rd Qu.:  -1.465                                        
+    ##  Max.   : 175.471                                        
+    ##  NA's   :5968
+
+``` r
 plot1 <- singer_locations %>% 
   filter( year != "0") %>% 
   filter(artist_hotttnesss != "0") %>% 
-  mutate(hotness=c("Hot", "Not")[(artist_hotttnesss>mean(artist_hotttnesss)) + 1]) %>%
-  ggplot(aes(year, artist_hotttnesss, color = hotness)) + geom_point(alpha = .2)
+  mutate(Duration=c("Long", "Short")[(duration>mean(duration)) + 1]) %>%
+  ggplot(aes(year, artist_hotttnesss, color = Duration)) + geom_point(alpha = .6) +
+  geom_smooth(method="lm") 
 plot1
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-23-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-24-1.png) This is kind of nice since it shows that artist hottness has nothing to do with duration of song length.
 
-Here I tried to show artist hotttness by latitude but had some issues with the full range of data showing up and being legible.
-
-``` r
-plot2 <- singer_locations %>% 
-  filter(!is.na(latitude)) %>% 
-  filter(artist_hotttnesss != "0") %>% 
-  ggplot(aes(artist_hotttnesss, latitude, color = latitude)) +
-  geom_point(alpha = .7) + 
-  scale_colour_gradient2(low="blue", mid="white", high="red", midpoint = 40.02, "Latitude") +
-  labs(x="Artist Hotttness", 
-          y="Latitude",
-          title="Artist Hotness by location")
-plot2
-```
-
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-24-1.png)
-
-One of Tamara Munzner's suggests was to use Viridis which has scales based on luminance. I also realized how redundant this was to just have the two variables and a repeat by color so I decided to plot artist familiarity too.
+Next I tried to show artist hotttness by latitude but had some issues with the full range of data showing up and being legible. One of Tamara Munzner's suggests was to use Viridis which has scales based on luminance. I also realized how redundant this was to just have the two variables and a repeat by color so I decided to plot artist familiarity too.
 
 ``` r
 library(viridis)
