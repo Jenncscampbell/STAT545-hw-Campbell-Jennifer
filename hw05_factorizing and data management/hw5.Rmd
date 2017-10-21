@@ -79,7 +79,7 @@ sl_facFYear <- (filter(sl_facF, year != "0"))
 ```
 **Second part of the quesiton:** Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
 
-I for my factor city, there are a numbe of NA values. 
+I for my factor `city`, there are a number of NA values. 
 ```{r}
 sl_facF_cityna <- (sl_facFYear %>% 
     filter(!is.na(city)))
@@ -133,7 +133,7 @@ str(sl_new3)
 
 I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only before 1990 and only in Philadelphia which seemed to be a popular location. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
 
-This seems to have worked perfectly. 
+
 
 ```{r}
 sl_small2 <- (sl_new3 %>% 
@@ -146,7 +146,7 @@ sl_order <- (sl_summary2 %>%
   mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)))
 levels(sl_order$artist_name_factor)
 ```
-
+This seems to have worked perfectly. 
 
 **Common part:**
 Explore effects of `arrange()`: 
@@ -248,10 +248,7 @@ City_hotnessDelim <-read.delim("City_hotness")
 
 **Visualization design** 
 
-```{r}
-singer_locations %>% 
-  summary(artist_hotttnesss)
-```
+
 
 Here I decided to examine artist hotttnesss by year. After trying this plot the first time I realized that I needed to remove 0s from both these variables. 
 ```{r}
@@ -380,5 +377,5 @@ ggsave("Artist_Hotttness_by_Location.pdf", width = 30, height = 20, units = "cm"
 ```
 
 
-Writing plots to files can be good for you to link say a plot of artitist familiarity [here]() or the one for artist hotttness [here]()
+Writing plots to files can be good for you to link say a plot of artitist familiarity [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_by_Location.pdf) or the one for artist hotttness [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Hotttness_by_Location.pdf)
 
