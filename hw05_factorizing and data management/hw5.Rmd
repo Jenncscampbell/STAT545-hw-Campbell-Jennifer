@@ -245,3 +245,91 @@ write_delim(City_hotness, "City_hotness")
 City_hotnessDelim <-read.delim("City_hotness")
 (head(City_hotnessDelim))
 ```
+
+**Visualization design** 
+
+```{r}
+singer_locations %>% 
+  summary(artist_hotttnesss)
+```
+
+Here I decided to examine artist hotttnesss by year. After trying this plot the first time I realized that I needed to remove 0s from both these variables. 
+```{r}
+plot1 <- singer_locations %>% 
+  filter( year != "0") %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  mutate(hotness=c("Hot", "Not")[(artist_hotttnesss>mean(artist_hotttnesss)) + 1]) %>%
+  ggplot(aes(year, artist_hotttnesss, color = hotness)) + geom_point(alpha = .2)
+plot1
+```
+
+Here I tried to show artist hotttness by latitude but had some issues with the full range of data showing up and being legible. 
+```{r}
+plot2 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  ggplot(aes(artist_hotttnesss, latitude, color = latitude)) +
+  geom_point(alpha = .7) + 
+  scale_colour_gradient2(low="blue", mid="white", high="red", midpoint = 40.02, "Latitude")
+plot2
+```
+
+One of Tamara Munzner's suggests was to use Viridis which has scales based on luminance. I also realized how redundant this was to just have the two variables and a repeat by color so I decided to plot artist familiarity too. 
+
+```{r}
+library(viridis)
+plot2 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  ggplot(aes(artist_hotttnesss, latitude, color = artist_familiarity))  +
+  geom_point(alpha = .2) + 
+  scale_fill_viridis()
+plot2
+```
+
+We can see form this data that there is more data in the north but also seems like lower overall ratings of familiarity. 
+
+It is super hard to read the previous graph with so much data clustered in the north. So here I separated it out by longitude too. 
+
+```{r}
+library(viridis)
+plot3 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+  ggplot(aes(longitude, latitude, color = artist_familiarity)) +
+  geom_point(alpha = .5) + 
+  scale_fill_viridis()
+plot3
+```
+
+Again this is pretty clusted but seems to show the most familiar artists are in the Europe and USA. Here I am going to zoom in on the UK. 
+
+```{r}
+library(viridis)
+plot4 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+  ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+  geom_point(alpha = .5) + 
+  scale_colour_viridis(option="inferno") 
+plot4
+```
+
+It is still pretty hard to read because of crowding
+
+```{r}
+library(viridis)
+plot4 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+  ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+  geom_point(alpha = .2) + 
+  scale_colour_viridis(option="inferno") 
+plot4
+```
+

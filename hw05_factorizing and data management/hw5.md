@@ -467,3 +467,146 @@ City_hotnessDelim <-read.delim("City_hotness")
     ## 4                                  TRKFFKR128F9303AE3 More Pipes SOHQSPY12AB0181325 Six Yanks ARCENE01187B9AF929 Barleyjuice 2006 192.93995 0.3762635263 0.541295002234 40.99471 -77.60454 Barleyjuice Pennsylvania Pennsylvania
     ## 5                   TRWKTVW12903CE5ACF Indian Deli SOGYBYQ12AB0188586 Beat Konducta Vol. 3 & 4: In India AR17D2T1187FB4DBC2 Madlib 2007 107.78077 0.533973158094 0.764026335274 34.20034 -119.18044 Madlib Oxnard, CA Oxnard, CA
     ## 6 TRUWFXF128E0795D22 Miss Gorgeous SOTEIQB12A6702048D Music Monks ARDNZL61187B98F42D Seeed's Pharaoh Riddim Feat. General Degree 2003 195.97016 0.480061156343 0.308673846767 50.7323 7.10169 Seeed feat. Elephant Man Bonn Bonn
+
+**Visualization design**
+
+``` r
+singer_locations %>% 
+  summary(artist_hotttnesss)
+```
+
+    ##    track_id            title             song_id         
+    ##  Length:10100       Length:10100       Length:10100      
+    ##  Class :character   Class :character   Class :character  
+    ##  Mode  :character   Mode  :character   Mode  :character  
+    ##                                                          
+    ##                                                          
+    ##                                                          
+    ##                                                          
+    ##    release           artist_id         artist_name             year     
+    ##  Length:10100       Length:10100       Length:10100       Min.   :   0  
+    ##  Class :character   Class :character   Class :character   1st Qu.:1994  
+    ##  Mode  :character   Mode  :character   Mode  :character   Median :2002  
+    ##                                                           Mean   :1979  
+    ##                                                           3rd Qu.:2006  
+    ##                                                           Max.   :2010  
+    ##                                                                         
+    ##     duration         artist_hotttnesss artist_familiarity    latitude     
+    ##  Min.   :   0.6004   Min.   :0.0000    Min.   :0.0000     Min.   :-45.87  
+    ##  1st Qu.: 184.0518   1st Qu.:0.3644    1st Qu.:0.5164     1st Qu.: 35.15  
+    ##  Median : 231.3791   Median :0.4098    Median :0.5960     Median : 40.72  
+    ##  Mean   : 248.3994   Mean   :0.4149    Mean   :0.5976     Mean   : 40.05  
+    ##  3rd Qu.: 288.4567   3rd Qu.:0.4673    3rd Qu.:0.6781     3rd Qu.: 50.88  
+    ##  Max.   :2149.3285   Max.   :1.0213    Max.   :1.0000     Max.   : 69.65  
+    ##                                                           NA's   :5968    
+    ##    longitude            name               city          
+    ##  Min.   :-155.434   Length:10100       Length:10100      
+    ##  1st Qu.: -90.200   Class :character   Class :character  
+    ##  Median : -74.727   Mode  :character   Mode  :character  
+    ##  Mean   : -53.632                                        
+    ##  3rd Qu.:  -1.465                                        
+    ##  Max.   : 175.471                                        
+    ##  NA's   :5968
+
+Here I decided to examine artist hotttnesss by year. After trying this plot the first time I realized that I needed to remove 0s from both these variables.
+
+``` r
+plot1 <- singer_locations %>% 
+  filter( year != "0") %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  mutate(hotness=c("Hot", "Not")[(artist_hotttnesss>mean(artist_hotttnesss)) + 1]) %>%
+  ggplot(aes(year, artist_hotttnesss, color = hotness)) + geom_point(alpha = .2)
+plot1
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-24-1.png)
+
+Here I tried to show artist hotttness by latitude but had some issues with the full range of data showing up and being legible.
+
+``` r
+plot2 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  ggplot(aes(artist_hotttnesss, latitude, color = latitude)) +
+  geom_point(alpha = .7) + 
+  scale_colour_gradient2(low="blue", mid="white", high="red", midpoint = 40.02, "Latitude")
+plot2
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-25-1.png)
+
+One of Tamara Munzner's suggests was to use Viridis which has scales based on luminance. I also realized how redundant this was to just have the two variables and a repeat by color so I decided to plot artist familiarity too.
+
+``` r
+library(viridis)
+```
+
+    ## Warning: package 'viridis' was built under R version 3.3.2
+
+    ## Loading required package: viridisLite
+
+    ## Warning: package 'viridisLite' was built under R version 3.3.2
+
+``` r
+plot2 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  ggplot(aes(artist_hotttnesss, latitude, color = artist_familiarity))  +
+  geom_point(alpha = .2) + 
+  scale_fill_viridis()
+plot2
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-26-1.png)
+
+We can see form this data that there is more data in the north but also seems like lower overall ratings of familiarity.
+
+It is super hard to read the previous graph with so much data clustered in the north. So here I separated it out by longitude too.
+
+``` r
+library(viridis)
+plot3 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+  ggplot(aes(longitude, latitude, color = artist_familiarity)) +
+  geom_point(alpha = .5) + 
+  scale_fill_viridis()
+plot3
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-27-1.png)
+
+Again this is pretty clusted but seems to show the most familiar artists are in the Europe and USA. Here I am going to zoom in on the UK.
+
+``` r
+library(viridis)
+plot4 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+  ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+  geom_point(alpha = .5) + 
+  scale_colour_viridis(option="inferno") 
+plot4
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-28-1.png)
+
+It is still pretty hard to read because of crowding
+
+``` r
+library(viridis)
+plot4 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+  ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+  geom_point(alpha = .2) + 
+  scale_colour_viridis(option="inferno") 
+plot4
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-29-1.png)

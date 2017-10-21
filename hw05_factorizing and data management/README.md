@@ -28,6 +28,10 @@ I ran into two problem at this step:
 **Common Part: Figures** This part was really easy. I was surprised that the graph wasn't already ordered with the arrange funciton. 
 
 **File I/O**
+This part seemed fine. I did realize that when I reran the knitting more than once it'd get stuck at my csv lines. If I deleted the created files in my folders then it would rerun and recreate the files. Not sure why this was happening but I figured out a work around. 
 
+
+**Visualization** 
+This part seemed fine. 
 
 
