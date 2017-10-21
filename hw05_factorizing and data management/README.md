@@ -32,6 +32,8 @@ This part seemed fine. I did realize that when I reran the knitting more than on
 
 
 **Visualization** 
-This part seemed fine. 
+This part seemed fine. I did find this cool [resource](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html) to graph onto maps. I tried to figure this out for a while before I gave up. 
+
+
 
 

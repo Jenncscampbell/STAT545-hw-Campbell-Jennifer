@@ -529,7 +529,10 @@ plot2 <- singer_locations %>%
   filter(artist_hotttnesss != "0") %>% 
   ggplot(aes(artist_hotttnesss, latitude, color = latitude)) +
   geom_point(alpha = .7) + 
-  scale_colour_gradient2(low="blue", mid="white", high="red", midpoint = 40.02, "Latitude")
+  scale_colour_gradient2(low="blue", mid="white", high="red", midpoint = 40.02, "Latitude") +
+  labs(x="Artist Hotttness", 
+          y="Latitude",
+          title="Artist Hotness by location")
 plot2
 ```
 
@@ -553,7 +556,10 @@ plot2 <- singer_locations %>%
   filter(artist_hotttnesss != "0") %>% 
   ggplot(aes(artist_hotttnesss, latitude, color = artist_familiarity))  +
   geom_point(alpha = .2) + 
-  scale_fill_viridis()
+  scale_fill_viridis("Familiarity") +
+  labs(x="Artist Hotttness", 
+          y="Latitude",
+          title="Artist Hotness and Familiarity by location")
 plot2
 ```
 
@@ -571,7 +577,10 @@ plot3 <- singer_locations %>%
   filter(year != "0") %>% 
   ggplot(aes(longitude, latitude, color = artist_familiarity)) +
   geom_point(alpha = .5) + 
-  scale_fill_viridis()
+  scale_fill_viridis() +
+  labs(x="Longitude", 
+          y="Latitude",
+          title="Artist Familiarity by location")
 plot3
 ```
 
@@ -588,25 +597,71 @@ plot4 <- singer_locations %>%
   filter(year != "0") %>% 
   ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
   geom_point(alpha = .5) + 
-  scale_colour_viridis(option="inferno") 
+  scale_colour_viridis(option="inferno") +
+  labs(x="Longitude", 
+          y="Latitude",
+          title="Artist Hotness by location")
 plot4
 ```
 
 ![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-28-1.png)
 
-It is still pretty hard to read because of crowding
+It is still pretty hard to read because of crowding. Maybe it is time to stop worrying about colour and use shape instead:
 
 ``` r
 library(viridis)
-plot4 <- singer_locations %>% 
+plot5 <- singer_locations %>% 
   filter(!is.na(latitude)) %>% 
   filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
   filter(artist_hotttnesss != "0") %>% 
   filter(year != "0") %>% 
-  ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
-  geom_point(alpha = .2) + 
-  scale_colour_viridis(option="inferno") 
-plot4
+  ggplot(aes(longitude, latitude, size=artist_hotttnesss, fill= artist_hotttnesss)) +
+  geom_point(alpha = .2, shape=21) +
+    labs(x="Longitude", 
+          y="Latitude",
+          title="Artist Familiarity by location")
+  
+plot5
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-29-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-29-1.png) I'm not really sure this is any better.
+
+After searching through our notes and links on the stat 545 page I found [this](http://ggplot2.tidyverse.org/reference/geom_density_2d.html) example of a density plot.
+
+``` r
+plot6 <- singer_locations %>% 
+  filter(!is.na(latitude)) %>% 
+  filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
+  filter(artist_hotttnesss != "0") %>% 
+  filter(year != "0") %>% 
+   ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+  geom_point(alpha = .5) +
+    scale_colour_viridis(option="inferno") +
+  geom_density_2d(aes(fill = ..level..), color = "red3", geom = "polygon") + 
+  theme_solarized() +
+  labs(x="Longitude", 
+          y="Latitude",
+          title="Artist Familiarity by location")
+```
+
+    ## Warning: Ignoring unknown parameters: geom
+
+    ## Warning: Ignoring unknown aesthetics: fill
+
+``` r
+plot6
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-30-1.png)
+
+This seems to deal with the crowding a bit better and reveals the large crowding of data around probably London.
+
+**Writing figures to file**
+
+``` r
+ggsave("Artist_Familiarity_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot3)
+
+ggsave("Artist_Hotttness_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot6)
+```
+
+Writing plots to files can be good for you to link say a plot of artitist familiarity [here]() or the one for artist hotttness [here]()
