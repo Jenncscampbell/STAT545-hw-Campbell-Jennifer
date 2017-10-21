@@ -65,32 +65,32 @@ All of these ways to factor appear to give the same results for our dataset so i
 
 **Drop 0.** Filter the `singer_locations` data to remove observations associated with the uncorrectly inputed `year` 0. Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
 
-First I removed any data with the year 0: 
 Prior to removal there were 10100 observations 
 
 ```{r}
 str(sl_facF)
 ```
- Now with removal 
-```{r}
-filter(sl_facF, year != "0") %>% 
-    str(sl_facF)
-```
-But after there were only 1000 observations
+ 
+ Now with removal of year 0: we are left with 10000 observations
 
-Then I removed any unused factor levels-  NA values for `city_factor`.
 ```{r}
-sl_facF %>% 
-    filter(!is.na(city)) %>% 
-  str(sl_facF)
+sl_facFYear <- (filter(sl_facF, year != "0")) 
+    str(sl_facFYear)
 ```
+**Second part of the quesiton:** Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
 
-Now there are only 4129 observations but with 1316 factor levels for city_factor. 
+I for my factor city, there are a numbe of NA values. 
+```{r}
+sl_facF_cityna <- (sl_facFYear %>% 
+    filter(!is.na(city)))
+  str(sl_facF_cityna)
+```
+After removing those we can see that were are 4090 observations with 1316 factor levels for city_factor. 
 
 In examining the data though there are a few odd factors like "?, Illinois, 020, 27, 310 Lousiana, 732 New Jersey" I decided to remove these as well. 
 
 ```{r}
-sl_new <- (sl_facF %>% 
+sl_new <- (sl_facFYear %>% 
 filter( city_factor != "?, Illinois")  %>% 
   filter( city_factor != "020") %>% 
   filter( city_factor != "310, Louisiana") %>% 
@@ -99,7 +99,7 @@ filter( city_factor != "?, Illinois")  %>%
     str(sl_new) 
 ```
 
-The structure now indicates that there are only 4122 observations. However, it does still list ?, Illinois. Just to check I tried to call up one of the removed items. 
+The structure now indicates that there are only 4083 observations. However, it does still list "?, Illinois". Just to check I tried to call up one of the removed items. 
 ```{r}
 sl_new %>% 
 filter(city_factor == "?, Illinois") 
@@ -122,3 +122,26 @@ str(sl_new3)
 
 
 **Reorder the levels of `year`, `artist_name` or `title`.** Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
+
+I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only 1958. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
+
+```{r}
+sl_small <- (sl_new3 %>% 
+  filter(year == 1958))
+sl_summary <- (sl_small %>% 
+                 filter(year == 1958) %>% 
+  mutate(artist_name_factor = factor(artist_name)) %>% 
+  group_by(artist_name_factor, song_id) %>% 
+  summarize(MaxDur=max(duration))) 
+sl_join <- left_join(sl_small, sl_summary)
+sl_order <- (sl_join %>% 
+               mutate(artist_name_factor = fct_reorder(artist_name_factor, MaxDur )))
+levels(sl_order$artist_name_factor)
+```
+
+
+This seems to have worked perfectly. 
+
+
+
+

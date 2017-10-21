@@ -24,7 +24,7 @@ kable(head(singer_locations))
 | TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping        | AR75GYU1187B9AE47A | Dorothy Ashby                  |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|  -83.04792| Dorothy Ashby | Detroit, MI  |
 | TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks           | ARCENE01187B9AF929 | Barleyjuice                    |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|  -77.60454| Barleyjuice   | Pennsylvania |
 
-First I tried to factorize city with the but that didn't work. This seems to be due to the existance of NA values. (Here I presented the code as a block quote since knitr wont render a file with code errors.)
+First I tried to factorize city with the `as_factor` used in class (cm012) but that didn't work. This seems to be due to the existance of NA values. (Here I presented the code as a block quote since knitr wont render a file with code errors.)
 
 > sl\_fac &lt;-singer\_locations %&gt;% mutate(city\_factor = as\_factor(city))
 
@@ -73,12 +73,12 @@ kable(head(singer_locations %>%
 | TRWKTVW12903CE5ACF | Indian Deli           | SOGYBYQ12AB0188586 | Beat Konducta Vol. 3 & 4: In India | AR17D2T1187FB4DBC2 | Madlib                                      |  2007|  107.7808|           0.5339732|            0.7640263|  34.20034|  -119.18044| Madlib                   | Oxnard, CA   | Oxnard, CA   |
 | TRUWFXF128E0795D22 | Miss Gorgeous         | SOTEIQB12A6702048D | Music Monks                        | ARDNZL61187B98F42D | Seeed's Pharaoh Riddim Feat. General Degree |  2003|  195.9702|           0.4800612|            0.3086738|  50.73230|     7.10169| Seeed feat. Elephant Man | Bonn         | Bonn         |
 
-Before deciding to remove NA's I'll just use `forcats` since we probably don't want to be reordering our factor anyway.
+Alternatively, base R also comes with `as.factor`:
 
 ``` r
-sl_fac <- singer_locations %>% 
-  mutate(city_factor = factor(city))
-kable(head(sl_fac))
+sl_facB <- singer_locations %>% 
+  mutate(city_factor = as.factor(city)) 
+kable(head(sl_facB))
 ```
 
 | track\_id          | title                 | song\_id           | release             | artist\_id         | artist\_name                   |  year|  duration|  artist\_hotttnesss|  artist\_familiarity|  latitude|  longitude| name          | city         | city\_factor |
@@ -90,12 +90,31 @@ kable(head(sl_fac))
 | TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping        | AR75GYU1187B9AE47A | Dorothy Ashby                  |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|  -83.04792| Dorothy Ashby | Detroit, MI  | Detroit, MI  |
 | TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks           | ARCENE01187B9AF929 | Barleyjuice                    |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|  -77.60454| Barleyjuice   | Pennsylvania | Pennsylvania |
 
-**Drop 0.** Filter the `singer_locations` data to remove observations associated with the uncorrectly inputed `year` 0. Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
-
-First I removed any data with the year 0: Prior to removal there were 10100 observations
+A third way is to just use `forcats`. This is often advised since we probably don't want to be reordering our factor which can happen with the base r versions.
 
 ``` r
-str(sl_fac)
+sl_facF <- singer_locations %>% 
+  mutate(city_factor = factor(city))
+kable(head(sl_facF))
+```
+
+| track\_id          | title                 | song\_id           | release             | artist\_id         | artist\_name                   |  year|  duration|  artist\_hotttnesss|  artist\_familiarity|  latitude|  longitude| name          | city         | city\_factor |
+|:-------------------|:----------------------|:-------------------|:--------------------|:-------------------|:-------------------------------|-----:|---------:|-------------------:|--------------------:|---------:|----------:|:--------------|:-------------|:-------------|
+| TRWICRA128F42368DB | The Conversation (Cd) | SOSURTI12A81C22FB8 | Even If It Kills Me | ARACDPV1187FB58DF4 | Motion City Soundtrack         |  2007|  170.4485|           0.6410183|            0.8230522|        NA|         NA| NA            | NA           | NA           |
+| TRXJANY128F42246FC | Lonely Island         | SODESQP12A6D4F98EF | The Duke Of Earl    | ARYBUAO1187FB3F4EB | Gene Chandler                  |  2004|  106.5530|           0.3937627|            0.5700167|  41.88415|  -87.63241| Gene Chandler | Chicago, IL  | Chicago, IL  |
+| TRIKPCA128F424A553 | Here's That Rainy Day | SOQUYQD12A8C131619 | Imprompture         | AR4111G1187B9B58AB | Paul Horn                      |  1998|  527.5947|           0.4306226|            0.5039940|  40.71455|  -74.00712| Paul Horn     | New York, NY | New York, NY |
+| TRYEATD128F92F87C9 | Rego Park Blues       | SOEZGRC12AB017F1AC | Still River         | ARQDZP31187B98D623 | Ronnie Earl & the Broadcasters |  1995|  695.1179|           0.3622792|            0.4773099|        NA|         NA| NA            | NA           | NA           |
+| TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping        | AR75GYU1187B9AE47A | Dorothy Ashby                  |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|  -83.04792| Dorothy Ashby | Detroit, MI  | Detroit, MI  |
+| TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks           | ARCENE01187B9AF929 | Barleyjuice                    |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|  -77.60454| Barleyjuice   | Pennsylvania | Pennsylvania |
+
+All of these ways to factor appear to give the same results for our dataset so it probaly doesn't matter which one we go with here.
+
+**Drop 0.** Filter the `singer_locations` data to remove observations associated with the uncorrectly inputed `year` 0. Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
+
+Prior to removal there were 10100 observations
+
+``` r
+str(sl_facF)
 ```
 
     ## Classes 'tbl_df', 'tbl' and 'data.frame':    10100 obs. of  15 variables:
@@ -115,17 +134,14 @@ str(sl_fac)
     ##  $ city              : chr  NA "Chicago, IL" "New York, NY" NA ...
     ##  $ city_factor       : Factor w/ 1316 levels "?, Illinois",..: NA 225 804 NA 305 910 NA NA NA NA ...
 
-But after there were only 1000 observations
+Now with removal of year 0: we are left with 10000 observations
 
 ``` r
-filter(sl_fac, year != "0") %>% 
-    str(sl_fac)
+sl_facFYear <- (filter(sl_facF, year != "0")) 
+    str(sl_facFYear)
 ```
 
     ## Classes 'tbl_df', 'tbl' and 'data.frame':    10000 obs. of  15 variables:
-
-    ## Warning in Ops.factor(left, right): '<' not meaningful for factors
-
     ##  $ track_id          : chr  "TRWICRA128F42368DB" "TRXJANY128F42246FC" "TRIKPCA128F424A553" "TRYEATD128F92F87C9" ...
     ##  $ title             : chr  "The Conversation (Cd)" "Lonely Island" "Here's That Rainy Day" "Rego Park Blues" ...
     ##  $ song_id           : chr  "SOSURTI12A81C22FB8" "SODESQP12A6D4F98EF" "SOQUYQD12A8C131619" "SOEZGRC12AB017F1AC" ...
@@ -142,18 +158,17 @@ filter(sl_fac, year != "0") %>%
     ##  $ city              : chr  NA "Chicago, IL" "New York, NY" NA ...
     ##  $ city_factor       : Factor w/ 1316 levels "?, Illinois",..: NA 225 804 NA 305 910 NA NA NA NA ...
 
-Then I removed any unused factor levels- NA values for `city_factor`.
+**Second part of the quesiton:** Additionally, remove unused factor levels. Provide concrete information on the data before and after removing these rows and levels; address the number of rows and the levels of the affected factors.
+
+I for my factor city, there are a numbe of NA values.
 
 ``` r
-sl_fac %>% 
-    filter(!is.na(city)) %>% 
-  str(sl_fac)
+sl_facF_cityna <- (sl_facFYear %>% 
+    filter(!is.na(city)))
+  str(sl_facF_cityna)
 ```
 
-    ## Classes 'tbl_df', 'tbl' and 'data.frame':    4129 obs. of  15 variables:
-
-    ## Warning in Ops.factor(left, right): '<' not meaningful for factors
-
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    4090 obs. of  15 variables:
     ##  $ track_id          : chr  "TRXJANY128F42246FC" "TRIKPCA128F424A553" "TRBYYXH128F4264585" "TRKFFKR128F9303AE3" ...
     ##  $ title             : chr  "Lonely Island" "Here's That Rainy Day" "Games" "More Pipes" ...
     ##  $ song_id           : chr  "SODESQP12A6D4F98EF" "SOQUYQD12A8C131619" "SOPIOCP12A8C13A322" "SOHQSPY12AB0181325" ...
@@ -170,12 +185,12 @@ sl_fac %>%
     ##  $ city              : chr  "Chicago, IL" "New York, NY" "Detroit, MI" "Pennsylvania" ...
     ##  $ city_factor       : Factor w/ 1316 levels "?, Illinois",..: 225 804 305 910 891 120 461 645 1103 938 ...
 
-Now there are only 4129 observations but with 1316 factor levels for city\_factor.
+After removing those we can see that were are 4090 observations with 1316 factor levels for city\_factor.
 
 In examining the data though there are a few odd factors like "?, Illinois, 020, 27, 310 Lousiana, 732 New Jersey" I decided to remove these as well.
 
 ``` r
-sl_new <- (sl_fac %>% 
+sl_new <- (sl_facFYear %>% 
 filter( city_factor != "?, Illinois")  %>% 
   filter( city_factor != "020") %>% 
   filter( city_factor != "310, Louisiana") %>% 
@@ -184,7 +199,7 @@ filter( city_factor != "?, Illinois")  %>%
     str(sl_new) 
 ```
 
-    ## Classes 'tbl_df', 'tbl' and 'data.frame':    4122 obs. of  15 variables:
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    4083 obs. of  15 variables:
     ##  $ track_id          : chr  "TRXJANY128F42246FC" "TRIKPCA128F424A553" "TRBYYXH128F4264585" "TRKFFKR128F9303AE3" ...
     ##  $ title             : chr  "Lonely Island" "Here's That Rainy Day" "Games" "More Pipes" ...
     ##  $ song_id           : chr  "SODESQP12A6D4F98EF" "SOQUYQD12A8C131619" "SOPIOCP12A8C13A322" "SOHQSPY12AB0181325" ...
@@ -201,7 +216,7 @@ filter( city_factor != "?, Illinois")  %>%
     ##  $ city              : chr  "Chicago, IL" "New York, NY" "Detroit, MI" "Pennsylvania" ...
     ##  $ city_factor       : Factor w/ 1316 levels "?, Illinois",..: 225 804 305 910 891 120 461 645 1103 938 ...
 
-The structure now indicates that there are only 4122 observations. However, it does still list ?, Illinois. Just to check I tried to call up one of the removed items.
+The structure now indicates that there are only 4083 observations. However, it does still list "?, Illinois". Just to check I tried to call up one of the removed items.
 
 ``` r
 sl_new %>% 
@@ -217,4 +232,66 @@ filter(city_factor == "?, Illinois")
 
 It did indead remove the value but I guess it still remembers it as a factor that did exist at one point.
 
+This was the first bit of code I found:
+
+``` r
+sl_new2 <-(droplevels(sl_new)$city_factor)
+str(sl_new2)
+```
+
+    ##  Factor w/ 1303 levels "Aachen / Aken / Aix-La-Chapelle",..: 220 795 299 899 881 115 453 637 1091 926 ...
+
+Okay, this code just created a new table but got rid of all my other data...
+
+I found on [R-bloggers](https://www.r-bloggers.com/r-drop-factor-levels-in-a-dataset/) advice to use `gdata` package to remove factor levels while retaining your other data. This seems to have worked.
+
+``` r
+sl_new3 <- drop.levels(sl_new) 
+str(sl_new3)
+```
+
+    ## Classes 'tbl_df', 'tbl' and 'data.frame':    4083 obs. of  15 variables:
+    ##  $ track_id          : chr  "TRXJANY128F42246FC" "TRIKPCA128F424A553" "TRBYYXH128F4264585" "TRKFFKR128F9303AE3" ...
+    ##  $ title             : chr  "Lonely Island" "Here's That Rainy Day" "Games" "More Pipes" ...
+    ##  $ song_id           : chr  "SODESQP12A6D4F98EF" "SOQUYQD12A8C131619" "SOPIOCP12A8C13A322" "SOHQSPY12AB0181325" ...
+    ##  $ release           : chr  "The Duke Of Earl" "Imprompture" "Afro-Harping" "Six Yanks" ...
+    ##  $ artist_id         : chr  "ARYBUAO1187FB3F4EB" "AR4111G1187B9B58AB" "AR75GYU1187B9AE47A" "ARCENE01187B9AF929" ...
+    ##  $ artist_name       : chr  "Gene Chandler" "Paul Horn" "Dorothy Ashby" "Barleyjuice" ...
+    ##  $ year              : int  2004 1998 1968 2006 2007 2003 2003 1989 1964 2008 ...
+    ##  $ duration          : num  107 528 237 193 108 ...
+    ##  $ artist_hotttnesss : num  0.394 0.431 0.411 0.376 0.534 ...
+    ##  $ artist_familiarity: num  0.57 0.504 0.53 0.541 0.764 ...
+    ##  $ latitude          : num  41.9 40.7 42.3 41 34.2 ...
+    ##  $ longitude         : num  -87.6 -74 -83 -77.6 -119.2 ...
+    ##  $ name              : chr  "Gene Chandler" "Paul Horn" "Dorothy Ashby" "Barleyjuice" ...
+    ##  $ city              : chr  "Chicago, IL" "New York, NY" "Detroit, MI" "Pennsylvania" ...
+    ##  $ city_factor       : Factor w/ 1303 levels "Aachen / Aken / Aix-La-Chapelle",..: 220 795 299 899 881 115 453 637 1091 926 ...
+
 **Reorder the levels of `year`, `artist_name` or `title`.** Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
+
+I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only 1958. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
+
+``` r
+sl_small <- (sl_new3 %>% 
+  filter(year == 1958))
+sl_summary <- (sl_small %>% 
+                 filter(year == 1958) %>% 
+  mutate(artist_name_factor = factor(artist_name)) %>% 
+  group_by(artist_name_factor, song_id) %>% 
+  summarize(MaxDur=max(duration))) 
+sl_join <- left_join(sl_small, sl_summary)
+```
+
+    ## Joining, by = "song_id"
+
+``` r
+sl_order <- (sl_join %>% 
+               mutate(artist_name_factor = fct_reorder(artist_name_factor, MaxDur )))
+levels(sl_order$artist_name_factor)
+```
+
+    ## [1] "Duane Eddy"          "Allen Toussaint"     "The Chantels"       
+    ## [4] "Jimmy McCracklin"    "Jackie Wilson"       "Cannonball Adderley"
+    ## [7] "JOHN COLTRANE"
+
+This seems to have worked perfectly.
