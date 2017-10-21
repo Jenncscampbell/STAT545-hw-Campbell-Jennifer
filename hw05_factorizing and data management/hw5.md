@@ -230,9 +230,19 @@ filter(city_factor == "?, Illinois")
     ## #   latitude <dbl>, longitude <dbl>, name <chr>, city <chr>,
     ## #   city_factor <fctr>
 
-It did indead remove the value but I guess it still remembers it as a factor that did exist at one point.
+It did indead remove the value but I guess it still remembers it as a factor that did exist at one point. To remove the levels first I used the forcats method:
 
-This was the first bit of code I found:
+``` r
+sl_new4 <- sl_new$city_factor %>%
+  fct_drop() %>% 
+str(sl_new4)
+```
+
+    ##  Factor w/ 1303 levels "Aachen / Aken / Aix-La-Chapelle",..: 220 795 299 899 881 115 453 637 1091 926 ...
+
+This seems to only retain this particular vector.
+
+After searching the web, I found this code:
 
 ``` r
 sl_new2 <-(droplevels(sl_new)$city_factor)
@@ -243,7 +253,7 @@ str(sl_new2)
 
 Okay, this code just created a new table but got rid of all my other data...
 
-I found on [R-bloggers](https://www.r-bloggers.com/r-drop-factor-levels-in-a-dataset/) advice to use `gdata` package to remove factor levels while retaining your other data. This seems to have worked.
+I found on [R-bloggers](https://www.r-bloggers.com/r-drop-factor-levels-in-a-dataset/) advice to use `gdata` package to remove factor levels while retaining your other data. This seems to have worked and retained all the other data I want.
 
 ``` r
 sl_new3 <- drop.levels(sl_new) 
@@ -269,7 +279,7 @@ str(sl_new3)
 
 **Reorder the levels of `year`, `artist_name` or `title`.** Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
 
-I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only 1958. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
+I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only before 1990 and only in Philadelphia which seemed to be a popular location. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
 
 This seems to have worked perfectly.
 
@@ -291,3 +301,115 @@ levels(sl_order$artist_name_factor)
     ##  [7] "First Choice"          "Pieces Of A Dream"    
     ##  [9] "Jimmy McGriff"         "David Bromberg"       
     ## [11] "McCoy Tyner"           "Pat Martino"
+
+**Common part:** Explore effects of `arrange()`:
+
+``` r
+sl_arange <- sl_summary2 %>% 
+  arrange(MaxDur) %>% 
+  ggplot(aes(artist_name_factor, MaxDur)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x="Artist", 
+          y="Maximum Song Duration",
+          title="Maximum Song Duration by Artists in Philly before the 90s")
+
+sl_arange
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-15-1.png)
+
+Now with the `factor_reorder` and the `arrange` function:
+
+``` r
+sl_FOrder <- sl_summary2 %>% 
+  mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)) %>% 
+  arrange(MaxDur) %>% 
+  ggplot(aes(artist_name_factor, MaxDur)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x="Artist", 
+          y="Maximum Song Duration",
+          title="Maximum Song Duration by Artists in Philly before the 90s")
+
+sl_FOrder
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-16-1.png)
+
+I was surprised that the `factor_reorder` function needed `arrange` to work so I tried it just the `factor_reorder` function:
+
+``` r
+sl_FOrder <- sl_summary2 %>% 
+  mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)) %>% 
+  ggplot(aes(artist_name_factor, MaxDur)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x="Artist", 
+          y="Maximum Song Duration",
+          title="Maximum Song Duration by Artists in Philly before the 90s")
+
+sl_FOrder
+```
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-17-1.png)
+
+It seems to have done the same thing as before. This is much easier to read with the `factor_reorder` function: it is clear to see the differences between artistis in the middle - (e.g., that The Delfonics had a larger maximum duration than Bill Cosby).
+
+**File I/O** For this part I decided to reorder city by artist\_hotttnesss. Here is the orignal head data layout:
+
+``` r
+City_hotness <- (singer_locations %>% 
+  filter(latitude >=30) %>% 
+  mutate(city_factor = factor(city)) %>% 
+  mutate(city_factor=fct_reorder(city_factor,artist_hotttnesss)))
+  kable(head(City_hotness))
+```
+
+| track\_id          | title                 | song\_id           | release                            | artist\_id         | artist\_name                                |  year|  duration|  artist\_hotttnesss|  artist\_familiarity|  latitude|   longitude| name                     | city         | city\_factor |
+|:-------------------|:----------------------|:-------------------|:-----------------------------------|:-------------------|:--------------------------------------------|-----:|---------:|-------------------:|--------------------:|---------:|-----------:|:-------------------------|:-------------|:-------------|
+| TRXJANY128F42246FC | Lonely Island         | SODESQP12A6D4F98EF | The Duke Of Earl                   | ARYBUAO1187FB3F4EB | Gene Chandler                               |  2004|  106.5530|           0.3937627|            0.5700167|  41.88415|   -87.63241| Gene Chandler            | Chicago, IL  | Chicago, IL  |
+| TRIKPCA128F424A553 | Here's That Rainy Day | SOQUYQD12A8C131619 | Imprompture                        | AR4111G1187B9B58AB | Paul Horn                                   |  1998|  527.5947|           0.4306226|            0.5039940|  40.71455|   -74.00712| Paul Horn                | New York, NY | New York, NY |
+| TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping                       | AR75GYU1187B9AE47A | Dorothy Ashby                               |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|   -83.04792| Dorothy Ashby            | Detroit, MI  | Detroit, MI  |
+| TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks                          | ARCENE01187B9AF929 | Barleyjuice                                 |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|   -77.60454| Barleyjuice              | Pennsylvania | Pennsylvania |
+| TRWKTVW12903CE5ACF | Indian Deli           | SOGYBYQ12AB0188586 | Beat Konducta Vol. 3 & 4: In India | AR17D2T1187FB4DBC2 | Madlib                                      |  2007|  107.7808|           0.5339732|            0.7640263|  34.20034|  -119.18044| Madlib                   | Oxnard, CA   | Oxnard, CA   |
+| TRUWFXF128E0795D22 | Miss Gorgeous         | SOTEIQB12A6702048D | Music Monks                        | ARDNZL61187B98F42D | Seeed's Pharaoh Riddim Feat. General Degree |  2003|  195.9702|           0.4800612|            0.3086738|  50.73230|     7.10169| Seeed feat. Elephant Man | Bonn         | Bonn         |
+
+First I wrote this to csv and then read it back in:
+
+``` r
+write_csv(City_hotness, "City_hotness.csv")
+City_hotnessCSV <-read_csv("City_hotness.csv")
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   track_id = col_character(),
+    ##   title = col_character(),
+    ##   song_id = col_character(),
+    ##   release = col_character(),
+    ##   artist_id = col_character(),
+    ##   artist_name = col_character(),
+    ##   year = col_integer(),
+    ##   duration = col_double(),
+    ##   artist_hotttnesss = col_double(),
+    ##   artist_familiarity = col_double(),
+    ##   latitude = col_double(),
+    ##   longitude = col_double(),
+    ##   name = col_character(),
+    ##   city = col_character(),
+    ##   city_factor = col_character()
+    ## )
+
+``` r
+kable(head(City_hotnessCSV))
+```
+
+| track\_id          | title                 | song\_id           | release                            | artist\_id         | artist\_name                                |  year|  duration|  artist\_hotttnesss|  artist\_familiarity|  latitude|   longitude| name                     | city         | city\_factor |
+|:-------------------|:----------------------|:-------------------|:-----------------------------------|:-------------------|:--------------------------------------------|-----:|---------:|-------------------:|--------------------:|---------:|-----------:|:-------------------------|:-------------|:-------------|
+| TRXJANY128F42246FC | Lonely Island         | SODESQP12A6D4F98EF | The Duke Of Earl                   | ARYBUAO1187FB3F4EB | Gene Chandler                               |  2004|  106.5530|           0.3937627|            0.5700167|  41.88415|   -87.63241| Gene Chandler            | Chicago, IL  | Chicago, IL  |
+| TRIKPCA128F424A553 | Here's That Rainy Day | SOQUYQD12A8C131619 | Imprompture                        | AR4111G1187B9B58AB | Paul Horn                                   |  1998|  527.5947|           0.4306226|            0.5039940|  40.71455|   -74.00712| Paul Horn                | New York, NY | New York, NY |
+| TRBYYXH128F4264585 | Games                 | SOPIOCP12A8C13A322 | Afro-Harping                       | AR75GYU1187B9AE47A | Dorothy Ashby                               |  1968|  237.3220|           0.4107520|            0.5303468|  42.33168|   -83.04792| Dorothy Ashby            | Detroit, MI  | Detroit, MI  |
+| TRKFFKR128F9303AE3 | More Pipes            | SOHQSPY12AB0181325 | Six Yanks                          | ARCENE01187B9AF929 | Barleyjuice                                 |  2006|  192.9400|           0.3762635|            0.5412950|  40.99471|   -77.60454| Barleyjuice              | Pennsylvania | Pennsylvania |
+| TRWKTVW12903CE5ACF | Indian Deli           | SOGYBYQ12AB0188586 | Beat Konducta Vol. 3 & 4: In India | AR17D2T1187FB4DBC2 | Madlib                                      |  2007|  107.7808|           0.5339732|            0.7640263|  34.20034|  -119.18044| Madlib                   | Oxnard, CA   | Oxnard, CA   |
+| TRUWFXF128E0795D22 | Miss Gorgeous         | SOTEIQB12A6702048D | Music Monks                        | ARDNZL61187B98F42D | Seeed's Pharaoh Riddim Feat. General Degree |  2003|  195.9702|           0.4800612|            0.3086738|  50.73230|     7.10169| Seeed feat. Elephant Man | Bonn         | Bonn         |

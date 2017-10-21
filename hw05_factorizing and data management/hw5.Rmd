@@ -105,16 +105,24 @@ sl_new %>%
 filter(city_factor == "?, Illinois") 
 ```
 
-It did indead remove the value but I guess it still remembers it as a factor that did exist at one point. 
+It did indead remove the value but I guess it still remembers it as a factor that did exist at one point. To remove the levels first I used the forcats method: 
 
-This was the first bit of code I found:
+
+```{r}
+sl_new4 <- sl_new$city_factor %>%
+  fct_drop() %>% 
+str(sl_new4)
+```
+This seems to only retain this particular vector. 
+
+After searching the web, I found this code:
 ```{r}
 sl_new2 <-(droplevels(sl_new)$city_factor)
 str(sl_new2)
 ```
 Okay, this code just created a new table but got rid of all my other data... 
 
-I found on [R-bloggers](https://www.r-bloggers.com/r-drop-factor-levels-in-a-dataset/) advice to use `gdata` package to remove factor levels while retaining your other data. This seems to have worked. 
+I found on [R-bloggers](https://www.r-bloggers.com/r-drop-factor-levels-in-a-dataset/) advice to use `gdata` package to remove factor levels while retaining your other data. This seems to have worked and retained all the other data I want. 
 ```{r}
 sl_new3 <- drop.levels(sl_new) 
 str(sl_new3)
@@ -123,7 +131,7 @@ str(sl_new3)
 
 **Reorder the levels of `year`, `artist_name` or `title`.** Use the forcats package to change the order of the factor levels, based on a principled summary of one of the quantitative variables. Consider experimenting with a summary statistic beyond the most basic choice of the median.
 
-I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only 1958. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
+I decided to reorder `artist_name` by maximum of song duration but since this is so much data and the next step is a graph - I filtered to only before 1990 and only in Philadelphia which seemed to be a popular location. First I had to factorize `artist_name`, then create a summarized coloumn of duration maximum for each artist name. But then I ran into an issue that you can't factor reorder a grouping variable. To solve this I took my newly created `sl_summary` which had the summary statistic that I wanted and left joined it with `sl_new3`
 
 This seems to have worked perfectly. 
 
@@ -140,8 +148,76 @@ levels(sl_order$artist_name_factor)
 ```
 
 
+**Common part:**
+Explore effects of `arrange()`: 
+
+
+```{r}
+sl_arange <- sl_summary2 %>% 
+  arrange(MaxDur) %>% 
+  ggplot(aes(artist_name_factor, MaxDur)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x="Artist", 
+          y="Maximum Song Duration",
+          title="Maximum Song Duration by Artists in Philly before the 90s")
+
+sl_arange
+```
 
 
 
 
+Now with the `factor_reorder` and the `arrange` function: 
+
+```{r}
+sl_FOrder <- sl_summary2 %>% 
+  mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)) %>% 
+  arrange(MaxDur) %>% 
+  ggplot(aes(artist_name_factor, MaxDur)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x="Artist", 
+          y="Maximum Song Duration",
+          title="Maximum Song Duration by Artists in Philly before the 90s")
+
+sl_FOrder
+```
+
+I was surprised that the `factor_reorder` function needed `arrange` to work so I tried it just the `factor_reorder` function: 
+
+```{r}
+sl_FOrder <- sl_summary2 %>% 
+  mutate(artist_name_factor=fct_reorder(artist_name_factor,MaxDur)) %>% 
+  ggplot(aes(artist_name_factor, MaxDur)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x="Artist", 
+          y="Maximum Song Duration",
+          title="Maximum Song Duration by Artists in Philly before the 90s")
+
+sl_FOrder
+```
+
+It seems to have done the same thing as before. This is much easier to read with the `factor_reorder` function: it is clear to see the differences between artistis in the middle - (e.g., that The Delfonics had a larger maximum duration than Bill Cosby).
+
+
+**File I/O**
+For this part I decided to reorder city by artist_hotttnesss. Here is the orignal head data layout: 
+
+```{r}
+City_hotness <- (singer_locations %>% 
+  filter(latitude >=30) %>% 
+  mutate(city_factor = factor(city)) %>% 
+  mutate(city_factor=fct_reorder(city_factor,artist_hotttnesss)))
+  kable(head(City_hotness))
+```
+
+First I wrote this to csv and then read it back in: 
+
+```{r}
+write_csv(City_hotness, "City_hotness.csv")
+City_hotnessCSV <-read_csv("City_hotness.csv")
+kable(head(City_hotnessCSV))
+```
 

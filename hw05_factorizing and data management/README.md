@@ -25,5 +25,9 @@ I ran into two problem at this step:
 -I also ran into an issue when I tried to fct_reorder on the whole dataset if you don't summarize first. This seemed to cause issues when there were multiple artists with multiple maximum durations. I ended up focusing on a few data points for the plot anyway but this is something to keep in mind. 
 
 
+**Common Part: Figures** This part was really easy. I was surprised that the graph wasn't already ordered with the arrange funciton. 
+
+**File I/O**
+
 
 
