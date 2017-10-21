@@ -252,10 +252,6 @@ City_hotnessDelim <-read.delim("City_hotness")
 
 Here I decided to examine artist hotttnesss by year. After trying this plot the first time I realized that I needed to remove 0s from both these variables. 
 
-```{r}
-singer_locations %>% 
-  summary()
-```
 
 ```{r}
 plot1 <- singer_locations %>% 
@@ -393,7 +389,12 @@ p1 + labs(x="Conintents",
           title="Maximum and Minimum GDP per capita")
 ```
 
-Here's how I would change it knowing what I do now: Remove the legend since it is redundant, arranged the data by MaxMin gdpPercap for easy reading, simplify the data by creating a difference score, color the columns consistent with categorical data, and change the theme to make for a cleaner graph. 
+Here's how I would change it knowing what I do now: 
+-   Remove the legend since it is redundant 
+-   Arranged the data by MaxMin gdpPercap for easy reading
+-   Simplify the data by creating a difference score
+-   Color the columns consistent with categorical data 
+-   Change the theme to make for a cleaner graph 
 
 
 
@@ -418,14 +419,15 @@ gapminder %>%
 **Writing figures to file**
 
 ```{r}
-ggsave("Artist_Familiarity_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot3)
+ggsave("Artist_Familiarity_by_Location.png", width = 30, height = 20, units = "cm", plot = plot3)
 
-ggsave("Artist_Familiarity_in_Europe.pdf", width = 30, height = 20, units = "cm", plot = plot7)
+ggsave("Artist_Familiarity_in_Europe.png", width = 30, height = 20, units = "cm", plot = plot7)
 ```
 
 
-Writing plots to files can be good for you to link say a plot of artitist familiarity [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_by_Location.pdf) or the one for artist hotttness [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Hotttness_by_Location.pdf)
+Writing plots to files can be good for you to link say a plot of artitist familiarity ![](https://techknowtools.files.wordpress.com/2014/08/phd-survivor.png "") 
 
+or the one for artist hotttness ![](https://techknowtools.files.wordpress.com/2014/08/phd-survivor.png "")
 
 
 

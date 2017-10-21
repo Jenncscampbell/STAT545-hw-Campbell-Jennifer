@@ -473,44 +473,6 @@ City_hotnessDelim <-read.delim("City_hotness")
 Here I decided to examine artist hotttnesss by year. After trying this plot the first time I realized that I needed to remove 0s from both these variables.
 
 ``` r
-singer_locations %>% 
-  summary()
-```
-
-    ##    track_id            title             song_id         
-    ##  Length:10100       Length:10100       Length:10100      
-    ##  Class :character   Class :character   Class :character  
-    ##  Mode  :character   Mode  :character   Mode  :character  
-    ##                                                          
-    ##                                                          
-    ##                                                          
-    ##                                                          
-    ##    release           artist_id         artist_name             year     
-    ##  Length:10100       Length:10100       Length:10100       Min.   :   0  
-    ##  Class :character   Class :character   Class :character   1st Qu.:1994  
-    ##  Mode  :character   Mode  :character   Mode  :character   Median :2002  
-    ##                                                           Mean   :1979  
-    ##                                                           3rd Qu.:2006  
-    ##                                                           Max.   :2010  
-    ##                                                                         
-    ##     duration         artist_hotttnesss artist_familiarity    latitude     
-    ##  Min.   :   0.6004   Min.   :0.0000    Min.   :0.0000     Min.   :-45.87  
-    ##  1st Qu.: 184.0518   1st Qu.:0.3644    1st Qu.:0.5164     1st Qu.: 35.15  
-    ##  Median : 231.3791   Median :0.4098    Median :0.5960     Median : 40.72  
-    ##  Mean   : 248.3994   Mean   :0.4149    Mean   :0.5976     Mean   : 40.05  
-    ##  3rd Qu.: 288.4567   3rd Qu.:0.4673    3rd Qu.:0.6781     3rd Qu.: 50.88  
-    ##  Max.   :2149.3285   Max.   :1.0213    Max.   :1.0000     Max.   : 69.65  
-    ##                                                           NA's   :5968    
-    ##    longitude            name               city          
-    ##  Min.   :-155.434   Length:10100       Length:10100      
-    ##  1st Qu.: -90.200   Class :character   Class :character  
-    ##  Median : -74.727   Mode  :character   Mode  :character  
-    ##  Mean   : -53.632                                        
-    ##  3rd Qu.:  -1.465                                        
-    ##  Max.   : 175.471                                        
-    ##  NA's   :5968
-
-``` r
 plot1 <- singer_locations %>% 
   filter( year != "0") %>% 
   filter(artist_hotttnesss != "0") %>% 
@@ -524,7 +486,7 @@ plot1 <- singer_locations %>%
 plot1
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-24-1.png) This is kind of nice since it shows that artist hottness has nothing to do with duration of song length.
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-23-1.png) This is kind of nice since it shows that artist hottness has nothing to do with duration of song length.
 
 Next I tried to show artist hotttness by latitude but had some issues with the full range of data showing up and being legible. One of Tamara Munzner's suggests was to use Viridis which has scales based on luminance. I also realized how redundant this was to just have the two variables and a repeat by color so I decided to plot artist familiarity too.
 
@@ -551,7 +513,7 @@ plot2 <- singer_locations %>%
 plot2
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-25-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-24-1.png)
 
 We can see form this data that there is more data in the north but also seems like lower overall ratings of familiarity.
 
@@ -572,7 +534,7 @@ plot3 <- singer_locations %>%
 plot3
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-26-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-25-1.png)
 
 Again this is pretty clusted but seems to show the most familiar artists are in the Europe and USA. Here I am going to zoom in on the UK.
 
@@ -592,7 +554,7 @@ plot4 <- singer_locations %>%
 plot4
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-27-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-26-1.png)
 
 It is still pretty hard to read because of crowding. Maybe it is time to stop worrying about colour and use shape instead:
 
@@ -612,7 +574,7 @@ plot5 <- singer_locations %>%
 plot5
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-28-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-27-1.png)
 
 I'm not really sure this is any better.
 
@@ -642,7 +604,7 @@ plot6 <- singer_locations %>%
 plot6
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-29-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-28-1.png)
 
 This seems to deal with the crowding a bit better and reveals the large crowding of data around probably London.
 
@@ -652,20 +614,22 @@ plot7 <- plot6 +   geom_text(data=subset(singer_locations, city %in% c("London, 
 plot7
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-30-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-29-1.png)
 
-Finally just to compare how I would change by graphs now. Here is a graph from HW 3 ![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-31-1.png)
+Finally just to compare how I would change by graphs now. Here is a graph from HW 3 ![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-30-1.png)
 
-Here's how I would change it knowing what I do now: Remove the legend since it is redundant, arranged the data by MaxMin gdpPercap for easy reading, simplify the data by creating a difference score, color the columns consistent with categorical data, and change the theme to make for a cleaner graph.
+Here's how I would change it knowing what I do now: - Remove the legend since it is redundant - Arranged the data by MaxMin gdpPercap for easy reading - Simplify the data by creating a difference score - Color the columns consistent with categorical data - Change the theme to make for a cleaner graph
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-32-1.png)
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-31-1.png)
 
 **Writing figures to file**
 
 ``` r
-ggsave("Artist_Familiarity_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot3)
+ggsave("Artist_Familiarity_by_Location.png", width = 30, height = 20, units = "cm", plot = plot3)
 
-ggsave("Artist_Familiarity_in_Europe.pdf", width = 30, height = 20, units = "cm", plot = plot7)
+ggsave("Artist_Familiarity_in_Europe.png", width = 30, height = 20, units = "cm", plot = plot7)
 ```
 
-Writing plots to files can be good for you to link say a plot of artitist familiarity [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_by_Location.pdf) or the one for artist hotttness [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Hotttness_by_Location.pdf)
+Writing plots to files can be good for you to link say a plot of artitist familiarity ![](https://techknowtools.files.wordpress.com/2014/08/phd-survivor.png)
+
+or the one for artist hotttness ![](https://techknowtools.files.wordpress.com/2014/08/phd-survivor.png)
