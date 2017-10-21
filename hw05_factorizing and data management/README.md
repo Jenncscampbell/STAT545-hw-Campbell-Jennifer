@@ -35,6 +35,6 @@ This part seemed fine. I did realize that when I reran the knitting more than on
 This part seemed fine. I did find this cool [resource](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html) to graph onto maps. I tried to figure this out for a while before I gave up. 
 
 **Repo clean-up** 
-I started to clean up and then realized that by changing my folder names that I had killed the links to figures and graphs. After this I got really nervous. I wanted to delete some of the other things like the rproject files but decided I didn't want to really mess with it until after grading just in case. 
+I started to clean up and then realized that by changing my folder names that I had killed the links to figures and graphs. After this I got really nervous about further changes. 
 
 
