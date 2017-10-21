@@ -630,6 +630,8 @@ ggsave("Artist_Familiarity_by_Location.png", width = 30, height = 20, units = "c
 ggsave("Artist_Familiarity_in_Europe.png", width = 30, height = 20, units = "cm", plot = plot7)
 ```
 
-Writing plots to files can be good for you to link say a plot of artitist familiarity ![](https://techknowtools.files.wordpress.com/2014/08/phd-survivor.png)
+Writing plots to files can be good for you to link say a plot of artitist familiarity ![](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_by_Location.png?raw=true)
 
-or the one for artist hotttness ![](https://techknowtools.files.wordpress.com/2014/08/phd-survivor.png)
+or the one for artist familiarity in europe:
+
+![](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_in_Europe.png?raw=true)
