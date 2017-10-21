@@ -129,7 +129,7 @@ This seems to have worked perfectly.
 
 ```{r}
 sl_small2 <- (sl_new3 %>% 
-  filter(year <= 1958))
+  filter(year <= 1990 & city=="Philadelphia, PA"))
 sl_summary2 <- (sl_small2 %>% 
   group_by(artist_name) %>% 
   summarize(MaxDur=max(duration))) %>% 
@@ -141,9 +141,6 @@ levels(sl_order$artist_name_factor)
 
 
 
-```{r}
-
-```
 
 
 

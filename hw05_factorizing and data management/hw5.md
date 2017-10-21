@@ -275,7 +275,7 @@ This seems to have worked perfectly.
 
 ``` r
 sl_small2 <- (sl_new3 %>% 
-  filter(year <= 1958))
+  filter(year <= 1990 & city=="Philadelphia, PA"))
 sl_summary2 <- (sl_small2 %>% 
   group_by(artist_name) %>% 
   summarize(MaxDur=max(duration))) %>% 
@@ -285,34 +285,9 @@ sl_order <- (sl_summary2 %>%
 levels(sl_order$artist_name_factor)
 ```
 
-    ##  [1] "Tom Lehrer"                                   
-    ##  [2] "Webb Pierce"                                  
-    ##  [3] "Duane Eddy"                                   
-    ##  [4] "Allen Toussaint"                              
-    ##  [5] "Dale Hawkins"                                 
-    ##  [6] "The Four Lads"                                
-    ##  [7] "Oscar Brand"                                  
-    ##  [8] "Danny And The Juniors"                        
-    ##  [9] "Eddy Arnold"                                  
-    ## [10] "Jimmy Reed"                                   
-    ## [11] "Lonnie Johnson"                               
-    ## [12] "Jimmy McCracklin"                             
-    ## [13] "The Chantels"                                 
-    ## [14] "The Robins aka The Coasters"                  
-    ## [15] "Jackie Wilson"                                
-    ## [16] "Hank Williams"                                
-    ## [17] "The Stanley Brothers;The Clinch Mountain Boys"
-    ## [18] "Alberta Hunter"                               
-    ## [19] "Tex Williams"                                 
-    ## [20] "Sleepy John Estes"                            
-    ## [21] "Julie London"                                 
-    ## [22] "The Five Satins"                              
-    ## [23] "Roosevelt Sykes"                              
-    ## [24] "Blind Lemon Jefferson"                        
-    ## [25] "Elmore James"                                 
-    ## [26] "Dizzy Gillespie"                              
-    ## [27] "Cannonball Adderley"                          
-    ## [28] "Sonny Clark"                                  
-    ## [29] "Charles Mingus"                               
-    ## [30] "Art Blakey"                                   
-    ## [31] "JOHN COLTRANE"
+    ##  [1] "Danny And The Juniors" "THE THREE DEGREES"    
+    ##  [3] "Shirley Scott"         "Bill Cosby"           
+    ##  [5] "The Delfonics"         "M.F.S.B"              
+    ##  [7] "First Choice"          "Pieces Of A Dream"    
+    ##  [9] "Jimmy McGriff"         "David Bromberg"       
+    ## [11] "McCoy Tyner"           "Pat Martino"
