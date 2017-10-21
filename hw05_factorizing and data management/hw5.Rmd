@@ -343,6 +343,7 @@ plot5 <- singer_locations %>%
   
 plot5
 ```
+
 I'm not really sure this is any better. 
 
 After searching through our notes and links on the stat 545 page I found [this](http://ggplot2.tidyverse.org/reference/geom_density_2d.html) example of a density plot. 
@@ -371,6 +372,48 @@ plot7 <- plot6 +   geom_text(data=subset(singer_locations, city %in% c("London, 
          aes(x=longitude, y=latitude, label=city), vjust=-5.5, hjust=.7)
 plot7
 ```
+
+
+Finally just to compare how I would change by graphs now. Here is a graph from HW 3
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+mygdp<-
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(Max_gdpPercap=max(gdpPercap),Min_gdpPercap=min(gdpPercap))
+
+gdp <- melt(mygdp[,c('continent','Max_gdpPercap','Min_gdpPercap')],id.vars = 1)
+
+
+p1<-ggplot(gdp,aes(x = continent,y = value)) + 
+  geom_bar(aes(fill = variable),stat = "identity",position = "dodge") +
+  scale_fill_discrete("GDP Per Capita Levels")  + 
+  scale_y_log10() 
+p1 + labs(x="Conintents", 
+          y="GDP Per Capita",
+          title="Maximum and Minimum GDP per capita")
+```
+
+Here's how I would change it knowing what I do now: Remove the legend since it is redundant, arranged the data by MaxMin gdpPercap for easy reading, simplify the data by creating a difference score, color the columns consistent with categorical data, and change the theme to make for a cleaner graph. 
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+mygdp <-
+gapminder %>% 
+  group_by(continent) %>% 
+  summarize(DS_MaxMin_gdpPercap=max(gdpPercap)-min(gdpPercap)) %>%
+  mutate(continent = factor(continent)) %>%
+  arrange(DS_MaxMin_gdpPercap) %>%
+  mutate(continentF=fct_reorder(continent,DS_MaxMin_gdpPercap))  
+  
+  ggplot(mygdp, aes(x = continentF,y = DS_MaxMin_gdpPercap)) + 
+  geom_bar(aes(fill = continentF), color="black",stat = "identity",position = "dodge") + labs(x="Conintents", 
+          y="Difference in GDP Per Capita",
+          title="Difference between Maximum and Minimum GDP\nper capita by Continent") +
+   theme_few() + guides(fill=FALSE)
+```
+
+
 
 **Writing figures to file**
 

@@ -20,9 +20,8 @@ This part was a bit tricky. I was getting errors from my factoring code. After a
 **Drop 0.** This part was easy except for when I tried to filter out mulitple values at once. I tried a number of form for sytax and ran into errors on each attempt. I eventually just decided to write a line for each separate one even though this is very inefficient.  Here I alsoran into problems because I realized that although my unused data was removed my unused factor levels were still there. I did a bit of hunting though and found a solution. 
 
 **Reorder the levels of `year`, `artist_name` or `title`.** 
-I ran into two problem at this step: 
-- I tried to create my summary statistic and then reorder and got this error: : Column `artist_name_factor` can't be modified because it's a grouping variable. 
--I also ran into an issue when I tried to fct_reorder on the whole dataset if you don't summarize first. This seemed to cause issues when there were multiple artists with multiple maximum durations. I ended up focusing on a few data points for the plot anyway but this is something to keep in mind. 
+I ran into two problems at this step: 
+First, I tried to create my summary statistic and then reorder and got this error: : Column `artist_name_factor` can't be modified because it's a grouping variable. I also ran into an issue when I tried to fct_reorder on the whole dataset if you don't summarize first. This seemed to cause issues when there were multiple artists with multiple maximum durations. I ended up focusing on a few data points for the plot anyway but this is something to keep in mind. 
 
 
 **Common Part: Figures** This part was really easy. I was surprised that the graph wasn't already ordered with the arrange funciton. 
@@ -32,7 +31,7 @@ This part seemed fine. I did realize that when I reran the knitting more than on
 
 
 **Visualization** 
-This part seemed fine. I did find this cool [resource](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html) to graph onto maps. I tried to figure this out for a while before I gave up. 
+This part seemed fine. I did find this cool [resource](https://cran.r-project.org/web/packages/ggthemes/vignettes/ggthemes.html) to graph onto maps. I tried to figure this out for a while before I gave up. In comparing to my old graphs from hw 3 I feel like I have learned a lot about data visualization. 
 
 **Repo clean-up** 
 I started to clean up and then realized that by changing my folder names that I had killed the links to figures and graphs. After this I got really nervous about further changes. 

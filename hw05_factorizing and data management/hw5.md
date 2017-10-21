@@ -612,7 +612,9 @@ plot5 <- singer_locations %>%
 plot5
 ```
 
-![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-28-1.png) I'm not really sure this is any better.
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-28-1.png)
+
+I'm not really sure this is any better.
 
 After searching through our notes and links on the stat 545 page I found [this](http://ggplot2.tidyverse.org/reference/geom_density_2d.html) example of a density plot.
 
@@ -651,6 +653,12 @@ plot7
 ```
 
 ![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-30-1.png)
+
+Finally just to compare how I would change by graphs now. Here is a graph from HW 3 ![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-31-1.png)
+
+Here's how I would change it knowing what I do now: Remove the legend since it is redundant, arranged the data by MaxMin gdpPercap for easy reading, simplify the data by creating a difference score, color the columns consistent with categorical data, and change the theme to make for a cleaner graph.
+
+![](hw5_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-32-1.png)
 
 **Writing figures to file**
 
