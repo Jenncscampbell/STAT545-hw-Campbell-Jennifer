@@ -516,7 +516,11 @@ plot1 <- singer_locations %>%
   filter(artist_hotttnesss != "0") %>% 
   mutate(Duration=c("Long", "Short")[(duration>mean(duration)) + 1]) %>%
   ggplot(aes(year, artist_hotttnesss, color = Duration)) + geom_point(alpha = .6) +
-  geom_smooth(method="lm") 
+  geom_smooth(method="lm") +
+  labs(x="Artist Hotttness", 
+          y="Year",
+          title="Artist Hotness and Song Duration by Year")
+  
 plot1
 ```
 
@@ -557,7 +561,7 @@ It is super hard to read the previous graph with so much data clustered in the n
 library(viridis)
 plot3 <- singer_locations %>% 
   filter(!is.na(latitude)) %>% 
-  filter(artist_hotttnesss != "0") %>% 
+  filter(artist_familiarity != "0") %>% 
   filter(year != "0") %>% 
   ggplot(aes(longitude, latitude, color = artist_familiarity)) +
   geom_point(alpha = .5) + 
@@ -577,14 +581,14 @@ library(viridis)
 plot4 <- singer_locations %>% 
   filter(!is.na(latitude)) %>% 
   filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
-  filter(artist_hotttnesss != "0") %>% 
+  filter(artist_familiarity != "0") %>% 
   filter(year != "0") %>% 
-  ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+  ggplot(aes(longitude, latitude, color = artist_familiarity)) +
   geom_point(alpha = .5) + 
   scale_colour_viridis(option="inferno") +
   labs(x="Longitude", 
           y="Latitude",
-          title="Artist Hotness by location")
+          title="Artist Familiarity by location")
 plot4
 ```
 
@@ -597,9 +601,9 @@ library(viridis)
 plot5 <- singer_locations %>% 
   filter(!is.na(latitude)) %>% 
   filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
-  filter(artist_hotttnesss != "0") %>% 
+  filter(artist_familiarity != "0") %>% 
   filter(year != "0") %>% 
-  ggplot(aes(longitude, latitude, size=artist_hotttnesss, fill= artist_hotttnesss)) +
+  ggplot(aes(longitude, latitude, size=artist_familiarity, fill= artist_familiarity)) +
   geom_point(alpha = .2, shape=21) +
     labs(x="Longitude", 
           y="Latitude",
@@ -616,9 +620,9 @@ After searching through our notes and links on the stat 545 page I found [this](
 plot6 <- singer_locations %>% 
   filter(!is.na(latitude)) %>% 
   filter(latitude >=20  & longitude > -10 & longitude < 50) %>% 
-  filter(artist_hotttnesss != "0") %>% 
+  filter(artist_familiarity != "0") %>% 
   filter(year != "0") %>% 
-   ggplot(aes(longitude, latitude, color = artist_hotttnesss)) +
+   ggplot(aes(longitude, latitude, color = artist_familiarity)) +
   geom_point(alpha = .5) +
     scale_colour_viridis(option="inferno") +
   geom_density_2d(aes(fill = ..level..), color = "red3", geom = "polygon") + 
@@ -653,7 +657,7 @@ plot7
 ``` r
 ggsave("Artist_Familiarity_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot3)
 
-ggsave("Artist_Hotttness_by_Location.pdf", width = 30, height = 20, units = "cm", plot = plot7)
+ggsave("Artist_Familiarity_in_Europe.pdf", width = 30, height = 20, units = "cm", plot = plot7)
 ```
 
 Writing plots to files can be good for you to link say a plot of artitist familiarity [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Familiarity_by_Location.pdf) or the one for artist hotttness [here](https://github.com/Jenncscampbell/STAT545-hw-Campbell-Jennifer/blob/master/hw05_factorizing%20and%20data%20management/Artist_Hotttness_by_Location.pdf)
